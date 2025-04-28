@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="130" id="KGk-i7-Jjw" customClass="UICodPaymentHeaderViewCell" customModule="XP_Driver" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nnT-ua-9ii">
+                        <rect key="frame" x="10" y="20" width="300" height="45"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Payment Method" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mcw-Py-XnL">
+                                <rect key="frame" x="11.999999999999993" y="14.666666666666664" width="112.33333333333331" height="15.666666666666664"/>
+                                <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSs-FW-E9h">
+                                <rect key="frame" x="250" y="0.0" width="50" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="idM-dV-X0p">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="45"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="onClickPlus" destination="KGk-i7-Jjw" eventType="touchUpInside" id="TqI-Eb-G2g"/>
+                                        </connections>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_plus.png" translatesAutoresizingMaskIntoConstraints="NO" id="G66-AH-ARO">
+                                        <rect key="frame" x="22" y="14.666666666666664" width="16" height="16"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="16" id="r9Y-eU-f7f"/>
+                                            <constraint firstAttribute="width" secondItem="G66-AH-ARO" secondAttribute="height" multiplier="1:1" id="yZj-0G-hhJ"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="idM-dV-X0p" firstAttribute="leading" secondItem="TSs-FW-E9h" secondAttribute="leading" id="IWc-ZL-Zqi"/>
+                                    <constraint firstItem="G66-AH-ARO" firstAttribute="centerY" secondItem="TSs-FW-E9h" secondAttribute="centerY" id="OCo-DY-n9j"/>
+                                    <constraint firstAttribute="trailing" secondItem="G66-AH-ARO" secondAttribute="trailing" constant="12" id="V1u-oD-6ej"/>
+                                    <constraint firstAttribute="bottom" secondItem="idM-dV-X0p" secondAttribute="bottom" id="YYK-Na-Tkp"/>
+                                    <constraint firstAttribute="width" constant="50" id="fCg-hV-lSH"/>
+                                    <constraint firstItem="idM-dV-X0p" firstAttribute="top" secondItem="TSs-FW-E9h" secondAttribute="top" id="hkP-3L-XXe"/>
+                                    <constraint firstAttribute="trailing" secondItem="idM-dV-X0p" secondAttribute="trailing" id="wZY-nL-A0w"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Mcw-Py-XnL" firstAttribute="centerY" secondItem="nnT-ua-9ii" secondAttribute="centerY" id="2wF-Wg-rrb"/>
+                            <constraint firstAttribute="height" constant="45" id="F4e-dQ-9TY"/>
+                            <constraint firstItem="Mcw-Py-XnL" firstAttribute="leading" secondItem="nnT-ua-9ii" secondAttribute="leading" constant="12" id="aZZ-p2-WMb"/>
+                            <constraint firstItem="TSs-FW-E9h" firstAttribute="top" secondItem="nnT-ua-9ii" secondAttribute="top" id="bxO-Jm-eYj"/>
+                            <constraint firstAttribute="bottom" secondItem="TSs-FW-E9h" secondAttribute="bottom" id="d7Z-oG-FMe"/>
+                            <constraint firstAttribute="trailing" secondItem="TSs-FW-E9h" secondAttribute="trailing" id="poO-cd-Ktu"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="nnT-ua-9ii" secondAttribute="bottom" id="39z-h3-Icm"/>
+                    <constraint firstItem="nnT-ua-9ii" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="cZw-KC-RiZ"/>
+                    <constraint firstAttribute="trailing" secondItem="nnT-ua-9ii" secondAttribute="trailing" constant="10" id="lMo-lR-vou"/>
+                    <constraint firstItem="nnT-ua-9ii" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="zIE-a6-iJc"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="viewBack" destination="nnT-ua-9ii" id="GR4-PW-LqK"/>
+            </connections>
+            <point key="canvasLocation" x="74.809160305343511" y="50"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_plus.png" width="16" height="16"/>
+    </resources>
+</document>

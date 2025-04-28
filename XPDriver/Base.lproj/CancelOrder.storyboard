@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3FP-vm-EUB">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro-Display-Semibold.otf">
+            <string>SFProDisplay-Semibold</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Cancel Order View Controller-->
+        <scene sceneID="g3g-NG-nnO">
+            <objects>
+                <viewController storyboardIdentifier="CancelOrderVC" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="3FP-vm-EUB" customClass="CancelOrderViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RmJ-UP-hXN"/>
+                        <viewControllerLayoutGuide type="bottom" id="hfh-nI-ZwC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="IxD-A4-MXf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BiN-Cz-52x" customClass="ShadowView">
+                                <rect key="frame" x="24" y="209" width="345" height="278"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Znz-oh-Sew" customClass="ShadowView">
+                                        <rect key="frame" x="8" y="8" width="337" height="270"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tell us, Why you want to cancel this order?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="720-6i-DMk">
+                                                <rect key="frame" x="16" y="8" width="305" height="44"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                                                <color key="textColor" red="0.18039215689999999" green="0.18039215689999999" blue="0.18039215689999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wtF-7f-Uw6" customClass="ShadowView">
+                                                <rect key="frame" x="16" y="68" width="305" height="122"/>
+                                                <subviews>
+                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KyX-tS-dBU" customClass="UIPlaceHolderTextView">
+                                                        <rect key="frame" x="8" y="4" width="289" height="114"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" systemColor="labelColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="3FP-vm-EUB" id="gad-eR-eqf"/>
+                                                        </connections>
+                                                    </textView>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="0.13263671874999999" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="KyX-tS-dBU" firstAttribute="top" secondItem="wtF-7f-Uw6" secondAttribute="top" constant="4" id="9Hm-L6-UbC"/>
+                                                    <constraint firstAttribute="width" secondItem="wtF-7f-Uw6" secondAttribute="height" multiplier="5:2" id="R6W-FD-7SX"/>
+                                                    <constraint firstItem="KyX-tS-dBU" firstAttribute="leading" secondItem="wtF-7f-Uw6" secondAttribute="leading" constant="8" id="Thh-jf-3eP"/>
+                                                    <constraint firstAttribute="trailing" secondItem="KyX-tS-dBU" secondAttribute="trailing" constant="8" id="UM5-uQ-3xF"/>
+                                                    <constraint firstAttribute="bottom" secondItem="KyX-tS-dBU" secondAttribute="bottom" constant="4" id="bNp-2X-NW6"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="connerRaduis">
+                                                        <real key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" name="PlaceholderColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5LG-di-hg6">
+                                                <rect key="frame" x="16" y="206.66666666666669" width="305" height="47.333333333333343"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgW-BZ-Eoh" customClass="RoundedButton">
+                                                        <rect key="frame" x="0.0" y="0.0" width="305" height="47.333333333333336"/>
+                                                        <color key="backgroundColor" name="AppBlueColor"/>
+                                                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="17"/>
+                                                        <state key="normal" title="Cancel Order">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="type">
+                                                                <integer key="value" value="2"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <integer key="value" value="4"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="cancelButtonPressed:" destination="3FP-vm-EUB" eventType="touchUpInside" id="6zP-BG-cvl"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="5LG-di-hg6" secondAttribute="height" multiplier="103:16" id="twk-PN-0vH"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="5LG-di-hg6" firstAttribute="top" secondItem="wtF-7f-Uw6" secondAttribute="bottom" constant="16.5" id="7Kn-vz-g7g"/>
+                                            <constraint firstItem="5LG-di-hg6" firstAttribute="leading" secondItem="Znz-oh-Sew" secondAttribute="leading" constant="16" id="9Rm-oG-Quc"/>
+                                            <constraint firstAttribute="trailing" secondItem="720-6i-DMk" secondAttribute="trailing" constant="16" id="Bx3-oe-S1O"/>
+                                            <constraint firstItem="wtF-7f-Uw6" firstAttribute="top" secondItem="720-6i-DMk" secondAttribute="bottom" constant="16" id="TM6-TZ-wI1"/>
+                                            <constraint firstAttribute="trailing" secondItem="5LG-di-hg6" secondAttribute="trailing" constant="16" id="URV-JZ-SrW"/>
+                                            <constraint firstItem="wtF-7f-Uw6" firstAttribute="leading" secondItem="Znz-oh-Sew" secondAttribute="leading" constant="16" id="Vdq-ZK-qys"/>
+                                            <constraint firstAttribute="bottom" secondItem="5LG-di-hg6" secondAttribute="bottom" constant="16" id="YIE-4e-v1Y"/>
+                                            <constraint firstAttribute="trailing" secondItem="wtF-7f-Uw6" secondAttribute="trailing" constant="16" id="b5w-kO-oSO"/>
+                                            <constraint firstItem="720-6i-DMk" firstAttribute="top" secondItem="Znz-oh-Sew" secondAttribute="top" constant="8" id="kcQ-8o-gDi"/>
+                                            <constraint firstItem="720-6i-DMk" firstAttribute="leading" secondItem="Znz-oh-Sew" secondAttribute="leading" constant="16" id="qYg-dT-Eqa"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="connerRaduis">
+                                                <real key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="Znz-oh-Sew" firstAttribute="leading" secondItem="BiN-Cz-52x" secondAttribute="leading" constant="8" id="I07-Ik-BEw"/>
+                                    <constraint firstItem="Znz-oh-Sew" firstAttribute="top" secondItem="BiN-Cz-52x" secondAttribute="top" constant="8" id="YHh-7F-sHP"/>
+                                    <constraint firstAttribute="bottom" secondItem="Znz-oh-Sew" secondAttribute="bottom" id="er9-ec-mHh"/>
+                                    <constraint firstAttribute="trailing" secondItem="Znz-oh-Sew" secondAttribute="trailing" id="tsC-yW-1z6"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isShdow" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shdowColor">
+                                        <color key="value" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <button opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V7B-Ds-y9x" customClass="RoundedButton">
+                                <rect key="frame" x="351" y="204" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="0gY-tm-nVh"/>
+                                    <constraint firstAttribute="height" constant="30" id="bpc-zH-Y73"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="20"/>
+                                <state key="normal" image="ic_orders_close">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonPressed:" destination="3FP-vm-EUB" eventType="touchUpInside" id="Gy6-By-C6l"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="LEA-xR-AeC"/>
+                        <color key="backgroundColor" red="0.13725490200000001" green="0.15686274510000001" blue="0.2156862745" alpha="0.65035156240000003" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="BiN-Cz-52x" secondAttribute="trailing" constant="24" id="Pl3-IN-rFb"/>
+                            <constraint firstItem="V7B-Ds-y9x" firstAttribute="top" secondItem="BiN-Cz-52x" secondAttribute="top" constant="-5" id="eb0-H9-Xsn"/>
+                            <constraint firstItem="BiN-Cz-52x" firstAttribute="top" secondItem="LEA-xR-AeC" secondAttribute="top" constant="150" id="ebV-wE-aEA"/>
+                            <constraint firstItem="BiN-Cz-52x" firstAttribute="leading" secondItem="IxD-A4-MXf" secondAttribute="leading" constant="24" id="oF8-Hl-kgU"/>
+                            <constraint firstItem="LEA-xR-AeC" firstAttribute="trailing" secondItem="V7B-Ds-y9x" secondAttribute="trailing" constant="12" id="wbW-4s-U2I"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="backButton" destination="V7B-Ds-y9x" id="JYM-Xq-hhl"/>
+                        <outlet property="cancelButton" destination="jgW-BZ-Eoh" id="xFo-wF-dqG"/>
+                        <outlet property="reasonTextView" destination="KyX-tS-dBU" id="9zw-Gp-EVP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L0L-rW-T4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1098.75" y="688.73239436619724"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="V7B-Ds-y9x">
+            <size key="intrinsicContentSize" width="68" height="68"/>
+        </designable>
+        <designable name="jgW-BZ-Eoh">
+            <size key="intrinsicContentSize" width="101" height="32"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="ic_orders_close" width="68" height="68"/>
+        <namedColor name="AppBlueColor">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="PlaceholderColor">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

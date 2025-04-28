@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UICodCashDetailPopupViewController" customModule="XP_Driver" customModuleProvider="target">
+            <connections>
+                <outlet property="lblDetail" destination="6Dv-q6-hsn" id="bYE-U3-NSW"/>
+                <outlet property="lblTitle" destination="QVt-eS-cwT" id="VKl-nl-dmN"/>
+                <outlet property="view" destination="ij2-ba-3GR" id="EjP-E0-6MH"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ij2-ba-3GR">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LjJ-q0-tkq">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gax-jr-VdV">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <connections>
+                        <action selector="onClickBack" destination="-1" eventType="touchUpInside" id="Bsj-fz-ZeA"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fsH-TV-PBw">
+                    <rect key="frame" x="20" y="311" width="353" height="230.33333333333337"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="73A-HN-2Jo">
+                            <rect key="frame" x="0.0" y="0.0" width="353" height="59"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$100.00 Cash Owing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QVt-eS-cwT">
+                                    <rect key="frame" x="10" y="19.333333333333314" width="174.33333333333334" height="20.333333333333329"/>
+                                    <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="18"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h4K-Et-F5i">
+                                    <rect key="frame" x="226" y="8" width="117" height="43"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wer-ss-DcJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="117" height="43"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <connections>
+                                                <action selector="onClickPayNow" destination="-1" eventType="touchUpInside" id="TUS-SB-GDN"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pay Now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8a-Qe-lGq">
+                                            <rect key="frame" x="25" y="12.333333333333314" width="67" height="18"/>
+                                            <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="16"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.050980392156862744" green="0.12549019607843137" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="Wer-ss-DcJ" firstAttribute="leading" secondItem="h4K-Et-F5i" secondAttribute="leading" id="AAr-wF-36I"/>
+                                        <constraint firstItem="K8a-Qe-lGq" firstAttribute="leading" secondItem="h4K-Et-F5i" secondAttribute="leading" constant="25" id="J0N-Mg-mJO"/>
+                                        <constraint firstItem="K8a-Qe-lGq" firstAttribute="centerY" secondItem="h4K-Et-F5i" secondAttribute="centerY" id="NOy-Ky-KdC"/>
+                                        <constraint firstAttribute="trailing" secondItem="Wer-ss-DcJ" secondAttribute="trailing" id="XIT-se-4o5"/>
+                                        <constraint firstAttribute="bottom" secondItem="Wer-ss-DcJ" secondAttribute="bottom" id="bvW-Ye-X0m"/>
+                                        <constraint firstItem="Wer-ss-DcJ" firstAttribute="top" secondItem="h4K-Et-F5i" secondAttribute="top" id="dsv-Yv-fHt"/>
+                                        <constraint firstAttribute="trailing" secondItem="K8a-Qe-lGq" secondAttribute="trailing" constant="25" id="fB5-4U-tx5"/>
+                                        <constraint firstAttribute="height" constant="43" id="wgd-4C-KOf"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="6"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="h4K-Et-F5i" secondAttribute="trailing" constant="10" id="IjS-Tf-kHg"/>
+                                <constraint firstItem="QVt-eS-cwT" firstAttribute="centerY" secondItem="73A-HN-2Jo" secondAttribute="centerY" id="M10-Eh-xma"/>
+                                <constraint firstAttribute="bottom" secondItem="h4K-Et-F5i" secondAttribute="bottom" constant="8" id="YQB-23-KGH"/>
+                                <constraint firstItem="h4K-Et-F5i" firstAttribute="top" secondItem="73A-HN-2Jo" secondAttribute="top" constant="8" id="bay-H3-2u3"/>
+                                <constraint firstItem="QVt-eS-cwT" firstAttribute="leading" secondItem="73A-HN-2Jo" secondAttribute="leading" constant="10" id="tpi-hv-mY1"/>
+                            </constraints>
+                        </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Dv-q6-hsn">
+                            <rect key="frame" x="10" y="74.000000000000014" width="333" height="134.33333333333337"/>
+                            <string key="text">You have received $ 100.00 in cash,  please pay the balance owing .
+
+  You can still receive Debit/ Credit Orders. Your Earning will be deducted from the cash amount you owe. </string>
+                            <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="6Dv-q6-hsn" secondAttribute="trailing" constant="10" id="JOM-J7-Hbs"/>
+                        <constraint firstAttribute="trailing" secondItem="73A-HN-2Jo" secondAttribute="trailing" id="Oja-ME-7hh"/>
+                        <constraint firstAttribute="bottom" secondItem="6Dv-q6-hsn" secondAttribute="bottom" constant="22" id="Pjt-wK-mla"/>
+                        <constraint firstItem="73A-HN-2Jo" firstAttribute="top" secondItem="fsH-TV-PBw" secondAttribute="top" id="WU3-Z9-NhC"/>
+                        <constraint firstItem="6Dv-q6-hsn" firstAttribute="leading" secondItem="fsH-TV-PBw" secondAttribute="leading" constant="10" id="lGg-GK-YlX"/>
+                        <constraint firstItem="73A-HN-2Jo" firstAttribute="leading" secondItem="fsH-TV-PBw" secondAttribute="leading" id="o09-1X-fND"/>
+                        <constraint firstItem="6Dv-q6-hsn" firstAttribute="top" secondItem="73A-HN-2Jo" secondAttribute="bottom" constant="15" id="vT0-fk-xmz"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="eJG-HD-xuf"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="LjJ-q0-tkq" secondAttribute="bottom" id="7M7-1k-WLI"/>
+                <constraint firstItem="fsH-TV-PBw" firstAttribute="leading" secondItem="eJG-HD-xuf" secondAttribute="leading" constant="20" id="7aq-Rc-e7x"/>
+                <constraint firstItem="gax-jr-VdV" firstAttribute="leading" secondItem="LjJ-q0-tkq" secondAttribute="leading" id="7n3-z8-w1e"/>
+                <constraint firstItem="gax-jr-VdV" firstAttribute="bottom" secondItem="LjJ-q0-tkq" secondAttribute="bottom" id="D1c-32-JoB"/>
+                <constraint firstItem="eJG-HD-xuf" firstAttribute="trailing" secondItem="fsH-TV-PBw" secondAttribute="trailing" constant="20" id="Jbn-Cm-G1f"/>
+                <constraint firstItem="LjJ-q0-tkq" firstAttribute="top" secondItem="ij2-ba-3GR" secondAttribute="top" id="M0a-YU-I7p"/>
+                <constraint firstItem="gax-jr-VdV" firstAttribute="top" secondItem="LjJ-q0-tkq" secondAttribute="top" id="Mmv-AY-odB"/>
+                <constraint firstItem="fsH-TV-PBw" firstAttribute="centerX" secondItem="ij2-ba-3GR" secondAttribute="centerX" id="Pzf-YZ-4Ag"/>
+                <constraint firstAttribute="trailing" secondItem="LjJ-q0-tkq" secondAttribute="trailing" id="SXb-oo-amr"/>
+                <constraint firstItem="LjJ-q0-tkq" firstAttribute="leading" secondItem="ij2-ba-3GR" secondAttribute="leading" id="Xs0-63-3cv"/>
+                <constraint firstItem="gax-jr-VdV" firstAttribute="trailing" secondItem="LjJ-q0-tkq" secondAttribute="trailing" id="cG5-bZ-ylv"/>
+                <constraint firstItem="fsH-TV-PBw" firstAttribute="centerY" secondItem="ij2-ba-3GR" secondAttribute="centerY" id="rSW-uz-D4B"/>
+            </constraints>
+            <point key="canvasLocation" x="-54.198473282442748" y="19.718309859154932"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

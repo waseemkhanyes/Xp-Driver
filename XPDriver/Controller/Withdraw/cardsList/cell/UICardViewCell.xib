@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="AvenirLTStd-Medium.otf">
+            <string>AvenirLTStd-Medium</string>
+        </array>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="149" id="KGk-i7-Jjw" customClass="UICardViewCell" customModule="XP_Driver" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="149"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="149"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bds-Z6-Ree">
+                        <rect key="frame" x="10" y="5" width="300" height="139"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2aw-xk-gUj">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="139"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <connections>
+                                    <action selector="onClickCard" destination="KGk-i7-Jjw" eventType="touchUpInside" id="J96-sx-S9B"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MasterCard" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0XX-HM-GR7">
+                                <rect key="frame" x="16" y="8" width="226" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="zXZ-8v-gbB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                <color key="textColor" name="TitelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CAD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uqx-R6-Ku6">
+                                <rect key="frame" x="226" y="8" width="24" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="NoW-i4-0H1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="11"/>
+                                <color key="textColor" name="TitelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="credit-card" translatesAutoresizingMaskIntoConstraints="NO" id="kJ6-S4-N4f">
+                                <rect key="frame" x="8" y="37" width="53" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="53" id="L3E-is-Uz8"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="MasterCard" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="86e-WB-tGv">
+                                <rect key="frame" x="68.999999999999986" y="41.666666666666657" width="156.66666666666663" height="55"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                <color key="textColor" name="TitelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_card_unselected" translatesAutoresizingMaskIntoConstraints="NO" id="DnH-ry-Lwn">
+                                <rect key="frame" x="250" y="42.666666666666671" width="42" height="53.666666666666671"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="sD9-vN-1ow"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8k-0a-1Vh">
+                                <rect key="frame" x="8" y="104.66666666666667" width="67" height="27.333333333333329"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27.5" id="ayt-4w-vmS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirLTStd-Medium" family="Avenir LT Std" pointSize="18"/>
+                                <state key="normal" title="Remove">
+                                    <color key="titleColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClickRemove" destination="KGk-i7-Jjw" eventType="touchUpInside" id="AFS-GZ-F6i"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94509803920000002" green="0.96862745100000003" blue="0.98823529409999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="86e-WB-tGv" firstAttribute="leading" secondItem="kJ6-S4-N4f" secondAttribute="trailing" constant="8" id="3AX-Tx-Syp"/>
+                            <constraint firstItem="y8k-0a-1Vh" firstAttribute="top" secondItem="86e-WB-tGv" secondAttribute="bottom" constant="8" id="9e8-Xx-mPp"/>
+                            <constraint firstAttribute="bottom" secondItem="2aw-xk-gUj" secondAttribute="bottom" id="APO-x6-t4L"/>
+                            <constraint firstItem="DnH-ry-Lwn" firstAttribute="leading" secondItem="86e-WB-tGv" secondAttribute="trailing" constant="24.5" id="EeC-Jj-xP6"/>
+                            <constraint firstItem="kJ6-S4-N4f" firstAttribute="leading" secondItem="bds-Z6-Ree" secondAttribute="leading" constant="8" id="HeO-6U-tiH"/>
+                            <constraint firstItem="y8k-0a-1Vh" firstAttribute="leading" secondItem="kJ6-S4-N4f" secondAttribute="leading" id="Hzf-HN-aJF"/>
+                            <constraint firstItem="86e-WB-tGv" firstAttribute="centerY" secondItem="kJ6-S4-N4f" secondAttribute="centerY" id="I3x-nw-edH"/>
+                            <constraint firstItem="2aw-xk-gUj" firstAttribute="leading" secondItem="bds-Z6-Ree" secondAttribute="leading" id="JrZ-wF-t9z"/>
+                            <constraint firstItem="DnH-ry-Lwn" firstAttribute="centerY" secondItem="bds-Z6-Ree" secondAttribute="centerY" id="KtR-Cc-jZS"/>
+                            <constraint firstAttribute="bottom" secondItem="y8k-0a-1Vh" secondAttribute="bottom" constant="7" id="Lah-ta-4E2"/>
+                            <constraint firstItem="0XX-HM-GR7" firstAttribute="leading" secondItem="bds-Z6-Ree" secondAttribute="leading" constant="16" id="ObR-kV-n7S"/>
+                            <constraint firstAttribute="trailing" secondItem="DnH-ry-Lwn" secondAttribute="trailing" constant="8" id="PkI-QP-eIn"/>
+                            <constraint firstAttribute="trailing" secondItem="uqx-R6-Ku6" secondAttribute="trailing" constant="50" id="RAh-4b-3KO"/>
+                            <constraint firstItem="kJ6-S4-N4f" firstAttribute="top" secondItem="0XX-HM-GR7" secondAttribute="bottom" constant="8" id="aO0-Pu-qWj"/>
+                            <constraint firstItem="0XX-HM-GR7" firstAttribute="top" secondItem="bds-Z6-Ree" secondAttribute="top" constant="8" id="gCF-bE-oVB"/>
+                            <constraint firstItem="2aw-xk-gUj" firstAttribute="top" secondItem="bds-Z6-Ree" secondAttribute="top" id="jDF-hg-fv7"/>
+                            <constraint firstItem="86e-WB-tGv" firstAttribute="top" secondItem="0XX-HM-GR7" secondAttribute="bottom" constant="12.5" id="jk6-z6-aRG"/>
+                            <constraint firstItem="DnH-ry-Lwn" firstAttribute="leading" secondItem="0XX-HM-GR7" secondAttribute="trailing" constant="8" id="lUp-eZ-PBT"/>
+                            <constraint firstAttribute="trailing" secondItem="2aw-xk-gUj" secondAttribute="trailing" id="nJZ-gt-Vp7"/>
+                            <constraint firstItem="uqx-R6-Ku6" firstAttribute="centerY" secondItem="0XX-HM-GR7" secondAttribute="centerY" id="zsQ-fR-gcn"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="connerRaduis">
+                                <real key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="bds-Z6-Ree" secondAttribute="trailing" constant="10" id="5w8-1W-OFH"/>
+                    <constraint firstItem="bds-Z6-Ree" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="bTh-9Z-IST"/>
+                    <constraint firstAttribute="bottom" secondItem="bds-Z6-Ree" secondAttribute="bottom" constant="5" id="goV-Q0-Ehl"/>
+                    <constraint firstItem="bds-Z6-Ree" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="rIB-DQ-KWb"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="backView" destination="bds-Z6-Ree" id="9QQ-Au-Qds"/>
+                <outlet property="cardImageView" destination="kJ6-S4-N4f" id="Xqk-kK-D78"/>
+                <outlet property="cardNameLabel" destination="0XX-HM-GR7" id="V63-JN-qxe"/>
+                <outlet property="cardNumberLabel" destination="86e-WB-tGv" id="jhB-14-aKu"/>
+                <outlet property="currencyLabel" destination="uqx-R6-Ku6" id="oYo-mH-7vb"/>
+                <outlet property="removeButton" destination="y8k-0a-1Vh" id="XJV-7d-sDD"/>
+                <outlet property="statusImageView" destination="DnH-ry-Lwn" id="C8K-PG-a1A"/>
+            </connections>
+            <point key="canvasLocation" x="138.93129770992365" y="57.394366197183103"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="credit-card" width="41" height="28"/>
+        <image name="ic_card_unselected" width="42.666667938232422" height="53.666667938232422"/>
+        <namedColor name="TitelColor">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

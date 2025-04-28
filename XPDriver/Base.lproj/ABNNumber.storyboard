@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OGz-Bk-7kP">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="AvenirLTStd-Heavy.otf">
+            <string>AvenirLTStd-Heavy</string>
+        </array>
+        <array key="AvenirLTStd-Roman.otf">
+            <string>AvenirLTStd-Roman</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--WebView-->
+        <scene sceneID="Npk-VZ-Tbc">
+            <objects>
+                <viewControllerPlaceholder storyboardName="WebView" id="aFh-qH-hMC" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hdu-xa-5h0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="263" y="232"/>
+        </scene>
+        <!--ABN Number-->
+        <scene sceneID="wuh-Fu-qTx">
+            <objects>
+                <viewController title="ABN Number" id="OGz-Bk-7kP" customClass="ABNNumberViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cYK-Ix-fwS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AGa-ah-3AQ" customClass="ShadowView">
+                                <rect key="frame" x="10" y="75" width="373" height="73"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ABN" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Gq-v2-64R" customClass="ACFloatingTextField">
+                                        <rect key="frame" x="10" y="10" width="353" height="55"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" red="0.93333333330000001" green="0.34509803919999998" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="55" id="6k0-rB-oLa"/>
+                                        </constraints>
+                                        <color key="textColor" systemColor="darkTextColor"/>
+                                        <fontDescription key="fontDescription" name="AvenirLTStd-Roman" family="Avenir LT Std" pointSize="13"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="selectedPlaceHolderColor">
+                                                <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="selectedLineColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="errorTextColor">
+                                                <color key="value" red="0.92549019610000005" green="0.019607843140000001" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="errorLineColor">
+                                                <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="mode">
+                                                <integer key="value" value="0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isDropDown" value="NO"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="OGz-Bk-7kP" id="6qu-Vh-X35"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="7Gq-v2-64R" secondAttribute="trailing" constant="10" id="1rD-wZ-zMP"/>
+                                    <constraint firstItem="7Gq-v2-64R" firstAttribute="leading" secondItem="AGa-ah-3AQ" secondAttribute="leading" constant="10" id="Nq2-sr-xzH"/>
+                                    <constraint firstItem="7Gq-v2-64R" firstAttribute="top" secondItem="AGa-ah-3AQ" secondAttribute="top" constant="10" id="hrU-Je-Q2h"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Gq-v2-64R" secondAttribute="bottom" constant="8" id="uXM-aY-QCk"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="connerRaduis">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shdowColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kwx-3b-yaB" customClass="RoundedButton">
+                                <rect key="frame" x="10" y="184" width="373" height="49.666666666666657"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Kwx-3b-yaB" secondAttribute="height" multiplier="15:2" id="IJD-9s-qY3"/>
+                                </constraints>
+                                <edgeInsets key="layoutMargins" top="8" left="23" bottom="25" right="8"/>
+                                <fontDescription key="fontDescription" name="AvenirLTStd-Heavy" family="Avenir LT Std" pointSize="13"/>
+                                <state key="normal" title="Update">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="type">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="updateButtonPressed:" destination="OGz-Bk-7kP" eventType="touchUpInside" id="nwd-RO-6Pu"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I accepts the terms and conditions" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ZK-CC-99G" customClass="ZSWTappableLabel">
+                                <rect key="frame" x="36" y="761.33333333333337" width="321" height="17.666666666666629"/>
+                                <fontDescription key="fontDescription" name="AvenirLTStd-Roman" family="Avenir LT Std" pointSize="15"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="O1T-uS-qXt"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="AGa-ah-3AQ" firstAttribute="top" secondItem="O1T-uS-qXt" secondAttribute="top" constant="16" id="2Jq-Ar-CqT"/>
+                            <constraint firstItem="AGa-ah-3AQ" firstAttribute="leading" secondItem="O1T-uS-qXt" secondAttribute="leading" constant="10" id="ENo-2g-SpU"/>
+                            <constraint firstItem="O1T-uS-qXt" firstAttribute="bottom" secondItem="9ZK-CC-99G" secondAttribute="bottom" constant="39" id="Ibj-lk-6WJ"/>
+                            <constraint firstItem="Kwx-3b-yaB" firstAttribute="top" secondItem="AGa-ah-3AQ" secondAttribute="bottom" constant="36" id="Kh8-4F-qXh"/>
+                            <constraint firstAttribute="trailing" secondItem="AGa-ah-3AQ" secondAttribute="trailing" constant="10" id="ceA-h8-raN"/>
+                            <constraint firstItem="Kwx-3b-yaB" firstAttribute="trailing" secondItem="AGa-ah-3AQ" secondAttribute="trailing" id="ff8-QZ-9R2"/>
+                            <constraint firstItem="9ZK-CC-99G" firstAttribute="leading" secondItem="O1T-uS-qXt" secondAttribute="leading" constant="36" id="jxL-ds-Rsg"/>
+                            <constraint firstItem="Kwx-3b-yaB" firstAttribute="leading" secondItem="AGa-ah-3AQ" secondAttribute="leading" id="sEe-xg-Rpl"/>
+                            <constraint firstItem="O1T-uS-qXt" firstAttribute="trailing" secondItem="9ZK-CC-99G" secondAttribute="trailing" constant="36" id="vtd-ds-6na"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <connections>
+                        <outlet property="messageLable" destination="9ZK-CC-99G" id="k4P-AL-sXL"/>
+                        <outlet property="numberField" destination="7Gq-v2-64R" id="bgQ-Ts-XFq"/>
+                        <outlet property="updateButton" destination="Kwx-3b-yaB" id="icJ-mt-s6d"/>
+                        <segue destination="aFh-qH-hMC" kind="show" identifier="ShowWebView" id="irg-Ue-Pqm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vo8-vi-OkU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-308" y="231"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="7Gq-v2-64R">
+            <size key="intrinsicContentSize" width="27" height="17"/>
+        </designable>
+        <designable name="Kwx-3b-yaB">
+            <size key="intrinsicContentSize" width="43" height="28"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
