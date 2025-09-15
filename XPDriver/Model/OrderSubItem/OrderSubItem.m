@@ -14,7 +14,7 @@
        if (!self) {
            return nil;
        }
-    [self setSubItemId:[NSString stringWithFormat:@"%@",attribute[@"id"]]];
+//    [self setSubItemId:[NSString stringWithFormat:@"%@",attribute[@"id"]]];
     [self setName:attribute[@"name"]];
     [self setPrice:[attribute[@"price"] floatValue]];
     [self setQuantity:[NSString stringWithFormat:@"%@",attribute[@"qty"]]];

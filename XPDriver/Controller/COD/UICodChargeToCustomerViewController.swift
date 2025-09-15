@@ -77,7 +77,14 @@ class UICodChargeToCustomerViewController: UIViewController {
         //        let data = getDummyOrder()
         //        print("** wk data: \(data.dictionaryObject ?? [:])")
         //        self.handlerSuccess?(data.dictionaryObject ?? [:])
-        codPaymentConfirmation()
+        
+        if UtilAvailability.shouldDisable {
+            Task {
+                await UtilAvailability.shared.showDummyLoading(con: self)
+            }
+        } else {
+            codPaymentConfirmation()
+        }
     }
     
     //MARK: - Api Calls -
@@ -86,7 +93,7 @@ class UICodChargeToCustomerViewController: UIViewController {
         self.showHud()
         let arrayLatLong = latLong.components(separatedBy: ",")
         var params: [String: Any] = [
-            "command": "codPaymentReceiveConfirmation",
+            "command": "codPaymentReceiveConfirmationOptimized",
             "order_id": order?.orderId ?? 0.0,
             "amount": totalPrice,
             "address":  address

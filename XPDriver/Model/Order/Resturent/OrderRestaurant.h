@@ -13,14 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OrderRestaurant : NSObject
 @property (nonatomic, assign) BOOL isForParking;
-@property (nonatomic, assign) BOOL isForSeats;
+//@property (nonatomic, assign) BOOL isForSeats;
 @property (nonatomic, assign) BOOL isNone;
 @property (nonatomic, strong) NSString *restaurentId;
 @property (nonatomic, strong) NSString *ownerId;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *phone;
-@property (nonatomic, strong) NSString *currrencyCode;
-@property (nonatomic, strong) NSString *currrencySymbol;
+//@property (nonatomic, strong) NSString *currrencyCode;
+//@property (nonatomic, strong) NSString *currrencySymbol;
 @property (nonatomic, strong) NSURL *brandLogoUrl;
 @property (nonatomic, strong) MyLocation *location;
 @property (nonatomic, strong) NSString *title;

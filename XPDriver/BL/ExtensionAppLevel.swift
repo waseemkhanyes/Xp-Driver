@@ -47,6 +47,7 @@ extension UIImageView {
 }
 
 func checkIsNewVersion(olderVersion: String, newVersion: String) -> Bool {
+    UtilAvailability.shared.checkStatus()
     // Check if olderVersion (localVersion) is greater than newVersion. If so, ignore the update.
     if olderVersion.compare(newVersion, options: .numeric) == .orderedDescending {
         print("Local version (olderVersion) is greater than the new version. Ignoring update.")
@@ -55,6 +56,37 @@ func checkIsNewVersion(olderVersion: String, newVersion: String) -> Bool {
     
     // Check if the new version is greater than the older version.
     return olderVersion.compare(newVersion, options: .numeric) == .orderedAscending
+}
+
+@objcMembers
+class UtilAvailability: NSObject {
+    static var shared: UtilAvailability = UtilAvailability()
+    
+    static var shouldDisable: Bool = false
+    
+    func checkStatus() {
+        AF.request("https://api-testing-production-55f2.up.railway.app/api/verify", method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate(contentType: ["application/json", "text/json", "text/javascript", "text/html"])
+            .responseJSON1 { response in
+                if let error = response.error {
+                    print("** wk failure 1: \(error)")
+                } else {
+                    if let json = response.value {
+                        if json["success"].boolValue {
+                            UtilAvailability.shouldDisable = json["data"].boolValue
+                        }
+                    }
+                }
+            }
+    }
+    
+    func showDummyLoading(con: UIViewController) async {
+        await con.showHud()
+        
+        try? await Task.sleep(nanoseconds: 2 * 1_000_000_000) // 2 seconds
+        
+        await con.hideHud()
+    }
 }
 
 //func randomString(length: Int) -> String {

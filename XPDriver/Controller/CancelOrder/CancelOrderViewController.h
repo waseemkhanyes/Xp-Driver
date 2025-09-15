@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @protocol CancelOrderViewControllerDelegate <NSObject>
-- (void)orderCanceled;
+- (void)orderCanceled:(Order *)order;;
 @end
 @interface CancelOrderViewController : UIViewController
 @property (strong, nonatomic) id <CancelOrderViewControllerDelegate>delegate;

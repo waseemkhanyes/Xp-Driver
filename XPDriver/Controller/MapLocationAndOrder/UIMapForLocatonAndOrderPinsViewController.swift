@@ -38,7 +38,7 @@ class UIMapForLocatonAndOrderPinsViewController: UIViewController, MapPinsDataOp
         
         let today = dateFormatter.string(from: Date())
         txtDate.selectedItem = today
-        viewModel.getDriverAssignedLocations(today)
+        viewModel.getDriverAssignedLocations(Date().date.in(region: .local).toFormat("yyyy-MM-dd"))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,9 +140,9 @@ class UIMapForLocatonAndOrderPinsViewController: UIViewController, MapPinsDataOp
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         print("** wk date: \(textField.text ?? "")")
-        if let date = textField.text {
+        if let strDate = textField.text, let date = strDate.toDate("EEE dd MMM, yyyy")?.date {
             self.lblLocation.text = "Select Location"
-            viewModel.getDriverAssignedLocations(date)
+            viewModel.getDriverAssignedLocations(date.toFormat("yyyy-MM-dd"))
         }
     }
     

@@ -14,28 +14,27 @@
     if (!self) {
         return nil;
     }
-   
+    
     NSDictionary *orderDetailDic = attribute[@"orderDetail"];
     NSDictionary *orderTrackingDic = orderDetailDic[@"order_tracking"];
     NSDate *date = [NSDate dateFromString:orderDetailDic[@"date_ordered"] withFormat:DATE_AND_TIME_S];
     [self setDropLocation:[[MyLocation alloc] initWithAddress:orderTrackingDic[@"drop_address"] coordinateString:orderTrackingDic[@"drop_coordinate"] distance:0]];
     [self setPaymentMethod:[orderDetailDic[@"payment_method"] stringValue]];
     [self setSubTotal:[orderDetailDic[@"sub_total"] stringValue]];
-    DLog(@"wk paymentMethod: %@, subTotal: %@", self.paymentMethod, self.subTotal);
-    [self setOrderTime:attribute[@"created_at"]];
-     [self setPreparingtime:orderDetailDic[@"ave_time"]];
-    [self setProcessingMinutes:[orderDetailDic[@"processing_minutes"] intValue]];
-    [self setDeliveryMinutes:[orderDetailDic[@"delivery_minutes"] intValue]];
+    //    [self setOrderTime:attribute[@"created_at"]];
+    //     [self setPreparingtime:orderDetailDic[@"ave_time"]];
+    //    [self setProcessingMinutes:[orderDetailDic[@"processing_minutes"] intValue]];
+    //    [self setDeliveryMinutes:[orderDetailDic[@"delivery_minutes"] intValue]];
     [self setNote:orderDetailDic[@"buyer_note"]];
     [self setAddressNote:orderTrackingDic[@"address_note"]];
     [self setOrderId:attribute[@"orderId"]];
-    [self setPrice:attribute[@"price"]];
+    //    [self setPrice:attribute[@"price"]];
     [self setStatus:[attribute[@"status"] intValue]];
     [self setDateOrdered:[date stringWithFormat:DATE_TIME_DISPLAY]];
     [self setTip:[orderDetailDic[@"tip_amount"] floatValue]];
-    [self setServiceFee:[orderDetailDic[@"service_fee"] floatValue]];
-    [self setDeliveryFee:[orderDetailDic[@"delivery_charge"] floatValue]];
-    [self setTax:[orderDetailDic[@"tax"] floatValue]];
+    //    [self setServiceFee:[orderDetailDic[@"service_fee"] floatValue]];
+    //    [self setDeliveryFee:[orderDetailDic[@"delivery_charge"] floatValue]];
+    //    [self setTax:[orderDetailDic[@"tax"] floatValue]];
     [self setCurrrencySymbol:orderDetailDic[@"currrency_symbol"]];
     [self setCurrrencyCode:orderDetailDic[@"currency_code"]];
     [self setIsDelivery:[orderDetailDic[@"picked_or_deliverd"] boolValue]];
@@ -46,7 +45,7 @@
     [self setDeliveredTime:[attribute[@"delivedTIme"] dateString]];
     [self setBrandLogoUrl:[NSURL URLWithString:orderDetailDic[@"image_1"]]];
     [self setRestaurant:[[OrderRestaurant alloc]initWithAtrribute:orderDetailDic[@"resturant"]]];
-    [self setOrderTracking:[[OrderTracking alloc]initWithAtrribute:orderTrackingDic]];
+    //    [self setOrderTracking:[[OrderTracking alloc]initWithAtrribute:orderTrackingDic]];
     [self setIsActive: [attribute[@"active"] boolValue]];
     [self setDistance:attribute[@"distance"]];
     [self setIsRequested:self.status == KOrderStatusAssigned];
@@ -56,17 +55,17 @@
     [self setIsDelivered:self.status == KOrderStatusDelivered];
     [self setIsRejected:self.status == KOrderStatusRejected];
     [self setIsMissed:self.status == KOrderStatusSkiped];
-    int additation = !self.isPickedUp? 10 : 0;
-    [self setPreparingtime:[NSString stringWithFormat:@"%@",@(self.deliveryMinutes + additation).stringValue]];
+//    int additation = !self.isPickedUp? 10 : 0;
+    //    [self setPreparingtime:[NSString stringWithFormat:@"%@",@(self.deliveryMinutes + additation).stringValue]];
     if ([orderDetailDic[@"user"] isKindOfClass:[NSDictionary class]]) {
         [self setCustomer:[[Customer alloc] initWithAttrebute:orderDetailDic[@"user"]]];
     }
-     NSArray *items = orderDetailDic[@"items"];
-    NSMutableArray *allInvoiceItems = [self getAllInvoiceItems:items currrencySymbol:self.currrencySymbol];
+    NSArray *items = orderDetailDic[@"items"];
+//    NSMutableArray *allInvoiceItems = [self getAllInvoiceItems:items currrencySymbol:self.currrencySymbol];
     NSMutableArray *allPriceItems = [self getPriceItems:orderDetailDic[@"driver_price"] currrencySymbol:self.currrencySymbol];
-    [self setInvoiceItems:[NSMutableArray arrayWithArray:[allInvoiceItems arrayByAddingObjectsFromArray:[allPriceItems mutableCopy]]]];
+    //    [self setInvoiceItems:[NSMutableArray arrayWithArray:[allInvoiceItems arrayByAddingObjectsFromArray:[allPriceItems mutableCopy]]]];
     [self setPriceInvoiceItems:allPriceItems];
-    [self setOrderInfo:[self orderInfo:items]];
+    //    [self setOrderInfo:[self orderInfo:items]];
     [self setItems:[self allOrderItems:items]];
     [self setDriverFee:[self driverFee]];
     [self setDriverFeeWithoutCurrent:[self driverFeeWithoutCurrent]];
@@ -103,24 +102,24 @@
     NSString *info = nil;
     for (NSDictionary *dic in items) {
         info = !info ?  [NSString stringWithFormat:@"%@\n",dic[@"name"]] : [NSString stringWithFormat:@"%@\n%@\n",info,dic[@"name"]];
-        //(%@ X %@%@)\n
-        //,dic[@"qty"],currrencySymbol,dic[@"price"]
         NSArray *subItems = dic[@"subitem"];
         for (NSDictionary *dic in subItems) {
-              info = [NSString stringWithFormat:@"%@ (%@) %@\n",info,dic[@"qty"],dic[@"name"]];
-           }
+            info = [NSString stringWithFormat:@"%@ (%@) %@\n",info,dic[@"qty"],dic[@"name"]];
+        }
     }
     return info;
 }
+
 - (NSMutableArray *)getPriceItems:(NSArray *)priceArray currrencySymbol:(NSString *)currrencySymbol{
     NSMutableArray *allInvoiceItems = [NSMutableArray new];
     for (NSDictionary *dic in priceArray) {
         InvoiceItem *newInvoiceItem = [[InvoiceItem alloc] initWithTitel:dic[@"meta_key"] price:dic[@"meta_value"] currrencySymbol:currrencySymbol];
-         [allInvoiceItems addObject:newInvoiceItem];
-       
+        [allInvoiceItems addObject:newInvoiceItem];
+        
     }
     return allInvoiceItems;
 }
+
 - (BOOL)getIsCouponValue:(NSArray *)priceArray {
     BOOL value = NO;
     for (NSDictionary *dic in priceArray) {
@@ -130,9 +129,9 @@
     }
     return value;
 }
+
 - (NSString *)driverFee{
     for (InvoiceItem *invoiceItem in self.priceInvoiceItems) {
-//        if ( [invoiceItem.title isEqualToString:@"TOTAL"]) {
         if ( [invoiceItem.title isEqualToString:@"You Earn"]) {
             return invoiceItem.priceInfo;
         }
@@ -140,7 +139,6 @@
     return @"";
 }
 
-// Change return type to float
 - (NSString *)driverFeeWithoutCurrent {
     for (InvoiceItem *invoiceItem in self.priceInvoiceItems) {
         if ([invoiceItem.title isEqualToString:@"You Earn Only Amount"]) {
@@ -150,30 +148,30 @@
     return @"0.0";
 }
 
-
 //- (NSString *)fullPrice{
 //    NSString *strPrice = [NSString stringWithFormat:@"%@", @""];
 //    for (InvoiceItem *invoiceItem in self.priceInvoiceItems) {
 //        if ( [invoiceItem.title isEqualToString:@"TOTAL"]) {
 //            return invoiceItem.priceInfo;
 //        }
-//        
+//
 //    }
 //    return @"";
 //}
-- (NSMutableArray *)getAllInvoiceItems:(NSArray *)items currrencySymbol:(NSString *)currrencySymbol{
-    NSMutableArray *allInvoiceItems = [NSMutableArray new];
-    for (NSDictionary *dic in items) {
-        InvoiceItem *newInvoiceItem = [[InvoiceItem alloc] initWithAttribute:dic currrencySymbol:currrencySymbol];
-        [allInvoiceItems addObject:newInvoiceItem];
-        NSArray *subItems = dic[@"subitem"];
-        for (NSDictionary *dic in subItems) {
-               InvoiceItem *newInvoiceItem = [[InvoiceItem alloc] initWithAttribute:dic currrencySymbol:currrencySymbol];
-               [allInvoiceItems addObject:newInvoiceItem];
-           }
-    }
-    return allInvoiceItems;
-}
+
+//- (NSMutableArray *)getAllInvoiceItems:(NSArray *)items currrencySymbol:(NSString *)currrencySymbol{
+//    NSMutableArray *allInvoiceItems = [NSMutableArray new];
+//    for (NSDictionary *dic in items) {
+//        InvoiceItem *newInvoiceItem = [[InvoiceItem alloc] initWithAttribute:dic currrencySymbol:currrencySymbol];
+//        [allInvoiceItems addObject:newInvoiceItem];
+//        NSArray *subItems = dic[@"subitem"];
+//        for (NSDictionary *dic in subItems) {
+//            InvoiceItem *newInvoiceItem = [[InvoiceItem alloc] initWithAttribute:dic currrencySymbol:currrencySymbol];
+//            [allInvoiceItems addObject:newInvoiceItem];
+//        }
+//    }
+//    return allInvoiceItems;
+//}
 - (NSMutableArray *)getDetailOptions:(NSArray *)priceArray{
     NSMutableArray *allDetailOptions = [NSMutableArray new];
     for (NSDictionary *dic in priceArray) {
@@ -209,11 +207,11 @@
 //            }else{
 //                block(JSON[@"msg"]);
 //            }
-//           
+//
 //        }else{
 //            block(error);
 //        }
-//        
+//
 //    }];
 //    // block([self allPopularRestaurents],nil);
 //}
@@ -230,13 +228,12 @@
         DLog(@"JSON %@",json[@"data"]);
         BOOL success = [json[@"success"] boolValue];
         if (success) {
-             block(nil);
+            block(nil);
         }else{
             block(json[@"msg"]);
         }
         
-    }
-                                           failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
+    } failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
         // Handle failure
         NSLog(@"Error: %@", error.localizedDescription);
         block(error.localizedDescription);

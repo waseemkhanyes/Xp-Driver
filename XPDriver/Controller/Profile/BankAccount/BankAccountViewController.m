@@ -15,7 +15,12 @@
 #import "BankAccountViewController.h"
 #import "XP_Driver-Swift.h"
 
-@interface BankAccountViewController ()<AddressViewControllerDelegate>
+@interface BankAccountViewController ()<AddressViewControllerDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIActionSheetDelegate, VPImageCropperDelegate>
+{
+    UIImageView *selectedImgView;
+    UIImagePickerController *imagePickerController;
+}
+
 
 @property (strong, nonatomic) User *user;
 @property (assign, nonatomic) BOOL isViewUp;
@@ -42,6 +47,9 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet ShadowView *baseView;
 
+@property (nonatomic, strong) IBOutlet UIImageView *selectedImageView;
+@property (nonatomic, strong) NSString *fileName;
+
 
 - (IBAction)updateButtonPressed:(id)sender;
 
@@ -57,8 +65,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.fileName = @"";
     self.title = @"Add Bank account";
     [self setup];
+    
     
 }
 - (void)setup{
@@ -194,6 +204,265 @@
 - (void)showAddressSelectionVC{
     [self performSegueWithIdentifier:@"ShowAddressSelectionView" sender:self];
 }
+
+#pragma mark Show Actionsheet
+- (void)showActionSheet
+{
+    UIAlertController * view =   [UIAlertController
+                                  alertControllerWithTitle:@"Add Photo"
+                                  message:@""
+                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* SelectFormGallery = [UIAlertAction
+                                        actionWithTitle:@"Take Photo"
+                                        
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction * action)
+                                        {
+                                            [self TakePic];
+                                            [view dismissViewControllerAnimated:YES completion:nil];
+                                            
+                                        }];
+    
+    UIAlertAction* TakePhoto = [UIAlertAction
+                                actionWithTitle:@"Choose Existing"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action)
+                                {
+                                    [self selectPic];
+                                    [view dismissViewControllerAnimated:YES completion:nil];
+                                    
+                                }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action){
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    [view addAction:SelectFormGallery];
+    [view addAction:TakePhoto];
+    [view addAction:cancel];
+    
+    
+    [self presentViewController:view animated:YES completion:nil];
+}
+
+-(void)TakePic
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = NO;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+-(void)selectPic
+{
+    imagePickerController = [[UIImagePickerController alloc]init];
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    imagePickerController.sourceType=UIImagePickerControllerCameraCaptureModePhoto;
+    imagePickerController.delegate = self;
+    imagePickerController.allowsEditing = NO;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+#pragma mark VPImageCropperDelegate
+
+- (void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage {
+    [self.selectedImageView setImage:editedImage];
+    [self upLoadImage:editedImage];
+    [cropperViewController dismissViewControllerAnimated:YES completion:^{
+        // TO DO
+    }];
+}
+
+-(void) imageCropperDidCancel:(VPImageCropperViewController *)cropperViewController {
+    [cropperViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [picker dismissViewControllerAnimated:YES completion:^() {
+        UIImage *portraitImg = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        portraitImg = [self imageByScalingToMaxSize:portraitImg];
+        // present the cropper view controller
+        VPImageCropperViewController *imgCropperVC = [[VPImageCropperViewController alloc] initWithImage:portraitImg cropFrame:self.cropFrame limitScaleRatio:3.0];
+        imgCropperVC.delegate = self;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:imgCropperVC];
+        [self presentViewController:navigationController animated:YES completion:NULL];
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark image scale utility
+
+- (UIImage *)imageByScalingToMaxSize:(UIImage *)sourceImage {
+    if (sourceImage.size.width < ORIGINAL_MAX_WIDTH) return sourceImage;
+    CGFloat btWidth = 0.0f;
+    CGFloat btHeight = 0.0f;
+    if (sourceImage.size.width > sourceImage.size.height) {
+        btHeight = ORIGINAL_MAX_WIDTH;
+        btWidth = sourceImage.size.width * (ORIGINAL_MAX_WIDTH / sourceImage.size.height);
+    } else {
+        btWidth = ORIGINAL_MAX_WIDTH;
+        btHeight = sourceImage.size.height * (ORIGINAL_MAX_WIDTH / sourceImage.size.width);
+    }
+    CGSize targetSize = CGSizeMake(btWidth, btHeight);
+    return [self imageByScalingAndCroppingForSourceImage:sourceImage targetSize:targetSize];
+}
+
+- (UIImage *)imageByScalingAndCroppingForSourceImage:(UIImage *)sourceImage targetSize:(CGSize)targetSize
+{
+    
+    UIImage *newImage = nil;
+    CGSize imageSize = sourceImage.size;
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat targetWidth = targetSize.width;
+    CGFloat targetHeight = targetSize.height;
+    CGFloat scaleFactor = 0.0;
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    CGPoint thumbnailPoint = CGPointMake(0.0,0.0);
+    if (CGSizeEqualToSize(imageSize, targetSize) == NO)
+    {
+        CGFloat widthFactor = targetWidth / width;
+        CGFloat heightFactor = targetHeight / height;
+        
+        if (widthFactor > heightFactor)
+            scaleFactor = widthFactor; // scale to fit height
+        else
+            scaleFactor = heightFactor; // scale to fit width
+        scaledWidth  = width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+        
+        // center the image
+        if (widthFactor > heightFactor)
+        {
+            thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+        }
+        else
+            if (widthFactor < heightFactor)
+            {
+                thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+            }
+    }
+    UIGraphicsBeginImageContext(targetSize); // this will crop
+    CGRect thumbnailRect = CGRectZero;
+    thumbnailRect.origin = thumbnailPoint;
+    thumbnailRect.size.width  = scaledWidth;
+    thumbnailRect.size.height = scaledHeight;
+    
+    [sourceImage drawInRect:thumbnailRect];
+    
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    if(newImage == nil) //NSLog(@"could not scale image");
+        
+        //pop the context to get back to the default
+        UIGraphicsEndImageContext();
+    return newImage;
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+}
+
+#pragma mark camera utility
+
+- (BOOL) isCameraAvailable{
+    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+}
+
+- (BOOL) isRearCameraAvailable{
+    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear];
+}
+
+- (BOOL) isFrontCameraAvailable {
+    return [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
+}
+
+- (BOOL) doesCameraSupportTakingPhotos {
+    return [self cameraSupportsMedia:(__bridge NSString *)kUTTypeImage sourceType:UIImagePickerControllerSourceTypeCamera];
+}
+
+- (BOOL) isPhotoLibraryAvailable{
+    return [UIImagePickerController isSourceTypeAvailable:
+            UIImagePickerControllerSourceTypePhotoLibrary];
+}
+- (BOOL) canUserPickVideosFromPhotoLibrary{
+    return [self
+            cameraSupportsMedia:(__bridge NSString *)kUTTypeMovie sourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+- (BOOL) canUserPickPhotosFromPhotoLibrary{
+    return [self
+            cameraSupportsMedia:(__bridge NSString *)kUTTypeImage sourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+
+- (BOOL) cameraSupportsMedia:(NSString *)paramMediaType sourceType:(UIImagePickerControllerSourceType)paramSourceType{
+    __block BOOL result = NO;
+    if ([paramMediaType length] == 0) {
+        return NO;
+    }
+    NSArray *availableMediaTypes = [UIImagePickerController availableMediaTypesForSourceType:paramSourceType];
+    [availableMediaTypes enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *mediaType = (NSString *)obj;
+        if ([mediaType isEqualToString:paramMediaType]){
+            result = YES;
+            *stop= YES;
+        }
+    }];
+    return result;
+}
+
+
+-(CGRect)cropFrame{
+    NSInteger imgtag = selectedImgView.tag;
+    CGRect frame;
+    if (imgtag == 1 || imgtag == 2) {
+        
+    }else {
+        frame = rect(0, 100, self.view.frame.size.width, self.view.frame.size.width);
+        
+    }
+    return  frame = rect(0, 200, self.view.frame.size.width, 200);;
+}
+
+-(void)upLoadImage:(UIImage *) image
+{
+    [self showHud];
+//    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self animated:YES];
+//    hud.labelText=@"Uploading Image";
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"upload", @"command"/*, @"stripe-identity-doc", @"slug"*/, UIImageJPEGRepresentation(image,0.6), @"file", nil];
+    
+    [AlamofireWrapper uploadImageWithParameters:params completion:^(NSString *fileName, NSString *error) {
+        [self hideHud];
+        if (fileName) {
+            self.fileName = fileName;
+        } else {
+//            [MBProgressHUD hideHUDForView:self animated:YES];
+            if ([@"Authorization required" compare:error] == NSOrderedSame){
+            }
+        }
+    }];
+}
+
+-(IBAction) onClickImage:(id)sender {
+    [self showActionSheet];
+}
+
 - (IBAction)updateButtonPressed:(id)sender {
     [self.view endEditing:YES];
     
@@ -201,7 +470,11 @@
     if ([self isOldInfo]) {
         [self showAlertWithMessage:@"You didn't add or change any information." alertType:KAlertTypeInfo];
         return;
+    } else if (self.fileName.isEmpty) {
+        [self showAlertWithMessage:@"Please upload image first" alertType:KAlertTypeInfo];
+        return;
     }
+    
     [self updateBankAccountInfo];
 }
 #pragma mark - AddressViewControllerDelegate -
@@ -246,36 +519,15 @@
     [params setObject:self.selectedCountry.countryID forKey:@"country_id"];
     [params setObject:self.selectedCurrency.name forKey:@"user_currency"];
     [params setObject:self.user.userId forKey:@"user_id"];
+    [params setObject:self.fileName forKey:@"identity_doc_image_name"];
     if (self.isIBAN) {
         [params setObject:@"1" forKey:@"IBAN"];
     }else{
         [params setObject:self.institutionNamberField.text  forKey:@"institution_number"];
         [params setObject:self.bankTransitNumberField.text forKey:@"bank_transit_number"];
     }
-    //    if (self.selectedCountry.isCanada) {
-    //        [params setObject:self.institutionNamberField.text  forKey:@"institution_number"];
-    //    }
     return params;
 }
-//- (void)updateBankAccountInfo{
-//
-//    [self.updateButton showLoading];
-//    [NetworkController apiPostWithParameters:self.parameters Completion:^(NSDictionary *json, NSString *error) {
-//        if (![json objectForKey:@"error"]&&json!=nil && json[@"data"] != nil) {
-//            if ( [json[@"success"] intValue] == 0){
-//                [self.updateButton hideLoading];
-//                [self showAlertWithMessage:json[@"msg"] alertType:KAlertTypeInfo];
-//            }else{
-//                [self fetchProfileDetail:json[@"msg"]];
-//            }
-//
-//        }else{
-//            NSString *errorMsg =[json objectForKey:@"error"];
-//            [self showAlertWithMessage:errorMsg alertType:KAlertTypeInfo];
-//
-//        }
-//    }];
-//}
 
 - (void)updateBankAccountInfo{
     

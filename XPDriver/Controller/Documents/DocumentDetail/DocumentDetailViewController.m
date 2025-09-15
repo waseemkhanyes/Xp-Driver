@@ -136,6 +136,7 @@
 }
 
 #pragma mark VPImageCropperDelegate
+
 - (void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage {
     [self.selectedImageView setImage:editedImage];
     [self saveImageForUploading];
@@ -185,6 +186,7 @@
     }];
 }
 #pragma mark - UIImagePickerControllerDelegate
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:^() {
         UIImage *portraitImg = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
@@ -200,6 +202,7 @@
 
 
 #pragma mark image scale utility
+
 - (UIImage *)imageByScalingToMaxSize:(UIImage *)sourceImage {
     if (sourceImage.size.width < ORIGINAL_MAX_WIDTH) return sourceImage;
     CGFloat btWidth = 0.0f;

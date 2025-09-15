@@ -78,9 +78,11 @@ class WebSocketManager: NSObject {
 //                print("** wk WebSocket receive error: \(error)")
                 self.delegate?.webSocketDidReceiveError(error: error)
             case .success(let message):
+//                print("** wk Received data message: \(message)")
                 switch message {
                 case .string(let text):
                     if let dicData = stringToDictionary(text) {
+                        print("** wk Received data message1: \(dicData)")
                         self.delegate?.webSocketDidReceiveMessage(text: nil, data: dicData)
                     }
                 case .data(let data):

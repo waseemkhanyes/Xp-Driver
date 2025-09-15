@@ -41,7 +41,7 @@
     if ([notification.name isEqualToString:KORDERS_NOTIFICATION_KEY]){
         NSDictionary* userInfo = notification.userInfo;
         NSMutableArray *orders = (NSMutableArray*)userInfo[@"orders"];
-        NSLog(@"wk orders: %@", orders);
+//        NSLog(@"wk orders: %@", orders);
         self.driverAddress = (NSString*)userInfo[@"driverAddress"];
         self.driverCoordinate = (NSString*)userInfo[@"driverCoordinate"];
         self.orders = orders;
@@ -153,7 +153,15 @@
     codCheck.address = self.driverAddress;
     [codCheck setHandlerSuccess:^(NSDictionary * _Nonnull data) {
         NSLog(@"Handler success data: %@", data);
+        
         Order *order = [[Order alloc] initWithAtrribute:[data dictionaryByReplacingNullsWithBlanks]];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Order *evaluatedObject, NSDictionary *bindings) {
+            return ![evaluatedObject.orderId isEqualToString:order.orderId];
+        }];
+        self.orders = [[self.orders filteredArrayUsingPredicate:predicate] mutableCopy];
+        [self.tableView reloadData];
+
         [self.delegate pushToFareAndRank:order];
 //            self.selectedOrder = order;
 //            [self performSegueWithIdentifier:FARE_Idintifire sender:self];
@@ -255,9 +263,10 @@
 - (void)activeOrder{
     DLog(@"Called");
     [self showHud];
+    NSMutableArray *tmpOrders = [self.orders mutableCopy];
     [self.orders removeAllObjects];
     NSMutableDictionary *parameters = [NSMutableDictionary new];
-    [parameters setObject:@"orderActive" forKey:@"command"];
+    [parameters setObject:@"orderActiveOptimized" forKey:@"command"];
     [parameters setObject:self.selectedOrder.orderId forKey:@"order_id"];
     [parameters setObject:SHAREMANAGER.userId forKey:@"driver_id"];
     
@@ -270,11 +279,32 @@
         // Handle success
         NSLog(@"wk Response fetchDictionryData JSON: %@", json);
         if (![json objectForKey:@"error"] &&  json!=nil){
-            NSArray *resultArray = [json objectForKey:RESULT];
-            NSDictionary *res = @{@"orders":resultArray};
-            RideRequest *request = [[RideRequest alloc] initWithAttribute:res];
-//            self.orders = request.orders;
-            [self.delegate changeActiveOrder: json];
+            for (Order *order in tmpOrders) {
+                Order *newOrder = order;
+                if (newOrder.orderId == self.selectedOrder.orderId) {
+                    newOrder.isActive = 1;
+                } else {
+                    newOrder.isActive = 0;
+                }
+                [self.orders addObject:newOrder];
+            }
+            
+//            [self.orders sortUsingComparator:^NSComparisonResult(Order *order1, Order *order2) {
+//                if (order1.isActive && !order2.isActive) {
+//                    return NSOrderedAscending;
+//                } else if (!order1.isActive && order2.isActive) {
+//                    return NSOrderedDescending;
+//                } else {
+//                    return NSOrderedSame;
+//                }
+//            }];
+            
+//            NSArray *resultArray = [json objectForKey:RESULT];
+//            NSDictionary *res = @{@"orders":resultArray};
+//            RideRequest *request = [[RideRequest alloc] initWithAttribute:res];
+////            self.orders = request.orders;
+//            [self.delegate changeActiveOrder: json];
+            [self.delegate changeActiveOrder];
             [self.tableView reloadData];
             [self hideHud];
             //[self performSelector:@selector(dismiss) withObject:nil afterDelay:1.5];

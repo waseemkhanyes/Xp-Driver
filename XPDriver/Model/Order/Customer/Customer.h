@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *firstName;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *phone;
-@property (nonatomic,strong) NSString  *rating;
+//@property (nonatomic,strong) NSString  *rating;
 @property (nonatomic,strong) NSURL *imageURL;
 - (instancetype)initWithAttrebute:(NSDictionary *)attribute;
 @end

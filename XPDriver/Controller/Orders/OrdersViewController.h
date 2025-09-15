@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol OrdersViewControllerDelegate <NSObject>
 - (void)ordersViewControllerDismissed;
 - (void)pushToFareAndRank: (Order *)order;
-- (void)changeActiveOrder: (NSDictionary *)data;
+//- (void)changeActiveOrder: (NSDictionary *)data;
+- (void)changeActiveOrder;
 - (void)clickToNavigate;
 -(void)clickScanButtonfromOrders;
 //- (void)scanQrCode:(NSString *)orderId;

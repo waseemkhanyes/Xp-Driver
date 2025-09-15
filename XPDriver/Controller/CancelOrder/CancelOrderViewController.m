@@ -53,12 +53,12 @@
     NSDictionary *parameters = @{@"command":@"driverCancelOrder",@"user_id":SHAREMANAGER.user.userId,@"order_id":self.order.orderId,@"reason":self.reasonTextView.text};
     [self.order cancelOrder:parameters Completion:^(NSString * _Nonnull error) {
         [self.cancelButton hideLoading];
-        [self dismissViewControllerAnimated:YES completion:^{
-                       [self.delegate orderCanceled];
-                   }];
+//        [self dismissViewControllerAnimated:YES completion:^{
+//                       [self.delegate orderCanceled];
+//                   }];
         if (!error) {
             [self dismissViewControllerAnimated:YES completion:^{
-                [self.delegate orderCanceled];
+                [self.delegate orderCanceled:self.order];
             }];
         }else{
             [CommonFunctions showAlertWithTitel:@"" message:error inVC:self];

@@ -2726,8 +2726,8 @@
 		FA4AFB8B24276F9C00BFBB6F /* Resturent */ = {
 			isa = PBXGroup;
 			children = (
-				FA07337623F7AD5D001873EB /* OrderRestaurant.m */,
 				FA07337923F7AD5D001873EB /* OrderRestaurant.h */,
+				FA07337623F7AD5D001873EB /* OrderRestaurant.m */,
 			);
 			path = Resturent;
 			sourceTree = "<group>";
@@ -3946,7 +3946,7 @@
 				CODE_SIGN_ENTITLEMENTS = "XP Driver.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9EW2WHJ3TF;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3979,7 +3979,7 @@
 				CODE_SIGN_ENTITLEMENTS = "XP Driver.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9EW2WHJ3TF;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

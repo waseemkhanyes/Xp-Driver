@@ -362,7 +362,7 @@
 
 -(void)updateActivity:(NSString *)activity {
     NSString *review = _reviewTextView.text.length == 0 ? @"" :_reviewTextView.text;
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"ratingAndReview",@"command",self.order.orderId,@"order_id",SHAREMANAGER.userId,@"user_id",_ratingIs,@"rating",review,@"review", nil];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithObjectsAndKeys:@"ratingAndReviewOptimized",@"command",self.order.orderId,@"order_id",SHAREMANAGER.userId,@"user_id",_ratingIs,@"rating",review,@"review", nil];
     
     [AlamofireWrapper performJSONRequestWithMethod:RequestMethodPost
                                          urlString:@"https://www.xpeats.com/api/index.php"

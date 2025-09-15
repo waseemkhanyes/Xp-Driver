@@ -109,23 +109,23 @@
     [cell configer:self.order.priceInvoiceItems];
     return cell;
 }
-- (ItemPriceCell *)itemPriceCell:(NSIndexPath *)indexPath{
-    ItemPriceCell *cell = [self.tableView dequeueReusableCellWithIdentifier:ItemPriceCell.identifier];
-    if ([self.itemAndSubItems[indexPath.row] isKindOfClass:[OrderItem class]]) {
-        OrderItem *item = self.itemAndSubItems[indexPath.row];
-        [cell.nameLable setText:item.itemName];
-         [cell.priceLabel setText:[NSString stringWithFormat:@"%@x %@",@(item.itemQuantity).stringValue,[NSString currencyString:item.itemPrice currency:self.order.currrencySymbol]]];
-        [cell.subItemPriceLabel setHidden:item.subItemsString.isEmpty];
-        [cell.subItemPriceLabel setText:[NSString stringWithFormat:@"%@ \n( %@)",item.subItemsString,[NSString currencyString:item.subItemPrice currency:self.order.currrencySymbol]]];
-       
-    }else{
-        OrderSubItem *subItem = self.itemAndSubItems[indexPath.row];
-        [cell.nameLable setText:subItem.name];
-        [cell.priceLabel setText:[NSString stringWithFormat:@"(1x %@)",[NSString currencyString:subItem.price currency:self.order.currrencySymbol]]];
-              [cell.subItemPriceLabel setHidden:YES];
-    }
-      return cell;
-}
+//- (ItemPriceCell *)itemPriceCell:(NSIndexPath *)indexPath{
+//    ItemPriceCell *cell = [self.tableView dequeueReusableCellWithIdentifier:ItemPriceCell.identifier];
+//    if ([self.itemAndSubItems[indexPath.row] isKindOfClass:[OrderItem class]]) {
+//        OrderItem *item = self.itemAndSubItems[indexPath.row];
+//        [cell.nameLable setText:item.itemName];
+//         [cell.priceLabel setText:[NSString stringWithFormat:@"%@x %@",@(item.itemQuantity).stringValue,[NSString currencyString:item.itemPrice currency:self.order.currrencySymbol]]];
+//        [cell.subItemPriceLabel setHidden:item.subItemsString.isEmpty];
+//        [cell.subItemPriceLabel setText:[NSString stringWithFormat:@"%@ \n( %@)",item.subItemsString,[NSString currencyString:item.subItemPrice currency:self.order.currrencySymbol]]];
+//       
+//    }else{
+//        OrderSubItem *subItem = self.itemAndSubItems[indexPath.row];
+//        [cell.nameLable setText:subItem.name];
+//        [cell.priceLabel setText:[NSString stringWithFormat:@"(1x %@)",[NSString currencyString:subItem.price currency:self.order.currrencySymbol]]];
+//              [cell.subItemPriceLabel setHidden:YES];
+//    }
+//      return cell;
+//}
 - (NSInteger)numberOfRows:(NSInteger)section{
     return 1;
 //    switch (section) {

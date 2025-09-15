@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OrderSubItem : NSObject
 @property (nonatomic) float price;
-@property (nullable,strong, nonatomic) NSString *subItemId;
+//@property (nullable,strong, nonatomic) NSString *subItemId;
 @property (nullable,strong, nonatomic) NSString *name;
 @property (nullable,strong, nonatomic) NSString *quantity;
 - (instancetype)initWithAttribute:(NSDictionary *)attribute;

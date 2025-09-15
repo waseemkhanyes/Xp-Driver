@@ -23,7 +23,7 @@
 #import "WithdrawViewController.h"
 #import "CountrySelectionViewController.h"
 
-@interface CurrentLocatioView ()<GMSMapViewDelegate,CancelOrderViewControllerDelegate,MenuViewDeleagte,ARCarMovementDelegate,RiderInfoViewDelegate,OrdersViewControllerDelegate, WebSocketManagerDelegate>{
+@interface CurrentLocatioView ()<GMSMapViewDelegate,CancelOrderViewControllerDelegate,MenuViewDeleagte,ARCarMovementDelegate,RiderInfoViewDelegate,OrdersViewControllerDelegate, WebSocketManagerDelegate, FareAndRatingViewDelegate>{
     CLLocation *prevCurrLocation;
     StarRatingView *starviewAnimated;
     MBProgressHUD *hude;
@@ -75,6 +75,7 @@
 @property BOOL shouldShowOrders;
 
 @property (nonatomic, strong) NSMutableArray<GMSMarker *> *mapMarkers;
+@property (strong, nonatomic)  NSMutableArray *arraySubmitOrders;
 
 @end
 
@@ -85,7 +86,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 {
     [super loadView];
     self.mapMarkers = [NSMutableArray array];
-
+    
     [self startTrackingLocation];
 }
 -(BOOL)prefersStatusBarHidden{
@@ -96,6 +97,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 }
 - (void)viewDidLoad
 {
+    self.arraySubmitOrders = [NSMutableArray array];
+    
     self.shouldShowOrders = true;
     self.isShowTelegramPopupFirstTime = false;
     self.showLowBalance = false;
@@ -151,10 +154,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self startToConnectWebSocket];
     [self getProjectedEarningApi];
     
-//    self.viewOrderListButton.layer.cornerRadius = self.viewOrderListButton.frame.size.height / 2.0; // Make it circular
-//    self.viewOrderListButton.layer.masksToBounds = NO;                           // Allow shadow outside bounds
-//    self.viewOrderListButton.clipsToBounds = YES;                                // Ensure content respects bounds
-
+    //    self.viewOrderListButton.layer.cornerRadius = self.viewOrderListButton.frame.size.height / 2.0; // Make it circular
+    //    self.viewOrderListButton.layer.masksToBounds = NO;                           // Allow shadow outside bounds
+    //    self.viewOrderListButton.clipsToBounds = YES;                                // Ensure content respects bounds
+    
     // Add shadow
     
     self.viewOrderListButton.layer.shadowColor = [UIColor blackColor].CGColor;   // Set shadow color to black
@@ -167,10 +170,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     self.viewOrdersMap.layer.shadowOffset = CGSizeMake(0, 3);              // Slightly adjust offset for a sharper effect
     self.viewOrdersMap.layer.shadowRadius = 5.0;
     
-//    self.viewProjectEarning.layer.shadowColor = [UIColor blackColor].CGColor;   // Shadow color
-//    self.viewProjectEarning.layer.shadowOpacity = 0.5;                         // Shadow opacity (0.0 to 1.0)
-//    self.viewProjectEarning.layer.shadowOffset = CGSizeMake(0, 5);             // Shadow offset
-    
+    //    self.viewProjectEarning.layer.shadowColor = [UIColor blackColor].CGColor;   // Shadow color
+    //    self.viewProjectEarning.layer.shadowOpacity = 0.5;                         // Shadow opacity (0.0 to 1.0)
+    //    self.viewProjectEarning.layer.shadowOffset = CGSizeMake(0, 5);             // Shadow offset
 }
 
 
@@ -244,9 +246,12 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         NSLog(@"** wk WebSocket received data: %@", data);
         NSString *type = [data[@"type"] stringValue];
         
+        NSLog(@"** wk WebSocket received data type: %@", type);
+        
         if ([type isEqualToString:@"update_user_coordinates"]) {
             [self updateDriverCoordinatesResponse:data];
-        } else if ([type isEqualToString:@"update_driver_location"]) {
+            //        } else if ([type isEqualToString:@"update_driver_location"]) {
+        } else if ([type isEqualToString:@"update_driver_location_optimized"]) {
             [self updateDriverLocationGetOrdersResponse:data];
         }
     }
@@ -270,13 +275,13 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     if (sessionId.length > 0 && ![sessionId isEqualToString:idString]) {
         value = false;
         [self clearUserCacheData];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [DELG.updLoctionTimer invalidate];
-//            DELG.updLoctionTimer = nil;
-//            [SHAREMANAGER clearUserDefault];
-//            
-//            [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
-//        });
+        //        dispatch_async(dispatch_get_main_queue(), ^{
+        //            [DELG.updLoctionTimer invalidate];
+        //            DELG.updLoctionTimer = nil;
+        //            [SHAREMANAGER clearUserDefault];
+        //
+        //            [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+        //        });
     }
     return value;
 }
@@ -360,9 +365,11 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self.cancelRideBarButton setTitle:@""  forState:UIControlStateNormal];
     
 }
+
 - (IBAction)gotoBatchManangmentVCPressed:(UIBarButtonItem *)sender{
     [self performSegueWithIdentifier:@"ShowBatchManagementVC" sender:self];
 }
+
 //- (void)showStatusButton:(NSString *)status{
 //
 //
@@ -422,63 +429,63 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 //}
 
 //- (void)showStatusButton:(NSString *)status {
-//    
+//
 //    // Create and configure the first button
 //    self.cancelRideBarButton = [RoundedButton buttonWithType:UIButtonTypeCustom];
 //    self.cancelRideBarButton.frame = CGRectMake(0, 0, 20, 30);
 //    [self.cancelRideBarButton addTarget:self action:@selector(cancelOrderButtonPressed:event:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.cancelRideBarButton setImage:[UIImage imageNamed:@"ic_more"] forState:UIControlStateNormal];
 //    [self.cancelRideBarButton setEnabled:YES];
-//    
+//
 //    // Create UIBarButtonItem for the first button (moreBtn)
 //    UIBarButtonItem *moreBtn = [[UIBarButtonItem alloc] initWithCustomView:self.cancelRideBarButton];
 //    [moreBtn setTintColor:[UIColor whiteColor]];
-//    
-//    
+//
+//
 //    RoundedButton *btnEarning = [RoundedButton buttonWithType:UIButtonTypeCustom];
 //    btnEarning.frame = CGRectMake(0, 0, 30, 30);
 //    [btnEarning addTarget:self action:@selector(onClickExpandEarningView:event:) forControlEvents:UIControlEventTouchUpInside];
 ////    [self.cancelRideBarButton setImage:[UIImage imageNamed:@"ic_more"] forState:UIControlStateNormal];
 //    [btnEarning setEnabled:YES];
 //    [btnEarning setTitle:@"⬇" forState:UIControlStateNormal];
-//    
+//
 //    UIBarButtonItem *projectEarningBtn = [[UIBarButtonItem alloc] initWithCustomView:btnEarning];
 //    [projectEarningBtn setTintColor:[UIColor whiteColor]];
-//    
+//
 ////    // Create UIBarButtonItem for the first button (moreBtn)
 ////    UIBarButtonItem *projectEarningBtn = [[UIBarButtonItem alloc] initWithCustomView:self.cancelRideBarButton];
 ////    [projectEarningBtn setTitle:@"⬇"];
 ////    [projectEarningBtn setTintColor:[UIColor whiteColor]];
-//    
+//
 //    // Create and configure the label
 //    UILabel *statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 65, 25)];
 //    statusLabel.text = (self.orders.count < 2 ? @"": [NSString stringWithFormat:@"%lu Orders", (unsigned long)self.orders.count]);
 //    statusLabel.textColor = [UIColor yellowColor];
 //    statusLabel.font = [UIFont systemFontOfSize:14];
-//    
+//
 //    // Create and configure the second button
 //    self.cancelRideBarButton = [RoundedButton buttonWithType:UIButtonTypeCustom];
 //    self.cancelRideBarButton.frame = CGRectMake(65, 0, 70, 25); // Adjusted frame to fit the label
 //    [self.cancelRideBarButton addTarget:self action:@selector(statusButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.cancelRideBarButton setImage:[UIImage imageNamed:@"ic_more"] forState:UIControlStateNormal];
 //    [self.cancelRideBarButton setEnabled:YES];
-//    
+//
 //    // Create a container view that holds both the label and the second button
 //    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 135, 25)];
 //    [containerView addSubview:btnEarning];
 //    [containerView addSubview:statusLabel];
 //    [containerView addSubview:self.cancelRideBarButton];
-//    
+//
 //    // Create UIBarButtonItem for the container view
 //    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:containerView];
-//    
+//
 //    // Add both UIBarButtonItems to the right side of the navigation bar
 //    if (self.orders.count == 0) {
 //        self.navigationItem.rightBarButtonItems = @[barButton];
 //    } else {
 //        self.navigationItem.rightBarButtonItems = @[moreBtn, barButton];
 //    }
-//    
+//
 //    [self.cancelRideBarButton hideLoadingWithTitel:status];
 //}
 
@@ -507,7 +514,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     // Set explicit width and height constraints for btnEarning
     [btnEarning.widthAnchor constraintEqualToConstant:30].active = YES;
     [btnEarning.heightAnchor constraintEqualToConstant:30].active = YES;
-
+    
     self.lblOrderCount.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.orders.count];
     // Create and configure the label
     UILabel *statusLabel = [[UILabel alloc] init];
@@ -515,7 +522,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     statusLabel.textColor = [UIColor yellowColor];
     statusLabel.font = [UIFont systemFontOfSize:14];
     statusLabel.textAlignment = NSTextAlignmentCenter;
-
+    
     // Create and configure the second button
     self.cancelRideBarButton = [RoundedButton buttonWithType:UIButtonTypeCustom];
     [self.cancelRideBarButton addTarget:self action:@selector(statusButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -524,7 +531,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
     [self.cancelRideBarButton.widthAnchor constraintEqualToConstant:70].active = YES;
     [self.cancelRideBarButton.heightAnchor constraintEqualToConstant:25].active = YES;
-
+    
     // Create a horizontal stack view
     UIStackView *hStackView = [[UIStackView alloc] initWithArrangedSubviews:@[btnEarning, statusLabel, self.cancelRideBarButton]];
     hStackView.axis = UILayoutConstraintAxisHorizontal;
@@ -550,14 +557,12 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self.cancelRideBarButton hideLoadingWithTitel:status];
 }
 
-
-
-
 - (void)hideStatusButton{
     [self.cancelRideBarButton setEnabled:NO];
     [self.cancelRideBarButton setImage:nil forState:UIControlStateNormal];
     
 }
+
 - (void)showGoogelMaps{
     NSLog(@"** wk map showGoogelMaps");
     GMSCameraPosition *camera   = [GMSCameraPosition cameraWithLatitude:self.vaildCoordinate.latitude longitude:self.vaildCoordinate.longitude zoom:18.0f];
@@ -569,6 +574,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 -(void)showDocmentsView{
     [self.navigationController pushViewController:instantiateVC(DOCUMENTS_VIEW) animated:NO];
 }
+
 - (void)driverLocationWithAddress{
     if (self.driverMarker.map == nil) {
         self.driverMarker = [[GMSMarker alloc] init];
@@ -586,7 +592,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         self.driverMarker.position = self.vaildCoordinate;
     }
 }
--(void)updateMarker{
+
+-(void)updateMarker {
     if (!self.isLocationChanged) {
         return;
     }
@@ -605,7 +612,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         user_defaults_set_string(MARKER_POSTION,strFormat(@"%f,%f",self.vaildCoordinate.latitude,self.vaildCoordinate.longitude) );
     }
 }
+
 #pragma mark - ARCarMovementDelegate
+
 - (void)ARCarMovementMoved:(GMSMarker * _Nonnull)Marker {
     if (self.driverMarker.map) {
         self.driverMarker = Marker;
@@ -618,17 +627,19 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     //    //
     
 }
-- (BOOL)isLocationChanged{
+
+- (BOOL)isLocationChanged {
     NSString *newCoordinateStr = strFormat(@"%f,%f",self.currLocation.coordinate.latitude,self.currLocation.coordinate.longitude);
     NSString *oldCoordinateStr  = user_defaults_get_string(MARKER_POSTION);
     return  strNotEquals(newCoordinateStr,oldCoordinateStr);
 }
-- (CLLocation *)currLocation{
+
+- (CLLocation *)currLocation {
     CLLocationCoordinate2D coordinats = self.locationTracker.currentLocation;
     return  [[CLLocation alloc] initWithLatitude:coordinats.latitude longitude:coordinats.longitude];;
 }
-- (void)somthlyMoveMarker:(GMSMarker *)marker to :(CLLocationCoordinate2D )coordinate
-{
+
+- (void)somthlyMoveMarker:(GMSMarker *)marker to :(CLLocationCoordinate2D )coordinate {
     
     [CATransaction begin];
     [CATransaction setAnimationDuration:2.0];
@@ -644,7 +655,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         [self.mapView animateToCameraPosition:camera];
     }
 }
-- (CLLocationCoordinate2D)vaildCoordinate{
+
+- (CLLocationCoordinate2D)vaildCoordinate {
     CLLocationCoordinate2D coordinate = self.locationTracker.currentLocation;
     NSString *oldCoordinateStr  = user_defaults_get_string(MARKER_POSTION);
     if ([SHAREMANAGER isVaildCoordinate:coordinate]){
@@ -664,7 +676,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     return DELG.currentCoordinate;
     
 }
-- (IBAction)cancelOrderButtonPressed:(UIBarButtonItem *)sender event:(UIEvent *)event{
+
+- (IBAction)cancelOrderButtonPressed:(UIBarButtonItem *)sender event:(UIEvent *)event {
     FTPopOverMenuConfiguration *configuration = [FTPopOverMenuConfiguration defaultConfiguration];
     configuration.textColor = [UIColor appBlackColor];
     configuration.backgroundColor = [UIColor whiteColor];
@@ -683,7 +696,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
 }
 
-- (IBAction)onClickExpandEarningView:(UIBarButtonItem *)sender event:(UIEvent *)event{
+- (IBAction)onClickExpandEarningView:(UIBarButtonItem *)sender event:(UIEvent *)event {
     if (self.constraintDriverProjectedEarningViewHeight.constant == 0.0) {
         [self updateProjectedEarningViewHeight:self.mapView.frame.size.height / 2.0];
     } else {
@@ -691,14 +704,15 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
 }
 
-- (void)cancelOrder{
+- (void)cancelOrder {
     //    if (!self.request.order.isPickedUp && !self.request.order.isDelivered) {
     [self performSegueWithIdentifier:CancelOrder_Idintifire sender:self];
     //    }else{
     //        [CommonFunctions showAlertWithTitel:@"Can't Cancel" message:@"You can't cancel order at this stage. Please contact support" inVC:self];
     //    }
 }
-- (IBAction)statusButtonPressed:(RoundedButton *)sender{
+
+- (IBAction)statusButtonPressed:(RoundedButton *)sender {
     User *user = [User info];
     if (user.infoMessage) {
         NSString *strTitle = @"Required Information";
@@ -723,9 +737,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                     } else if (user.picNeme.isEmpty) {
                         identifier = SHOWPROFILE;
                     }
-//                    else if ([user.infoMessage isEqualToString:@"CreditCardRequired"]) {
-//                        identifier = @"ShowCountrySelectionVC";
-//                    }
+                    //                    else if ([user.infoMessage isEqualToString:@"CreditCardRequired"]) {
+                    //                        identifier = @"ShowCountrySelectionVC";
+                    //                    }
                     if (!identifier.isEmpty) {
                         [self performSegueWithIdentifier:identifier sender:self];
                     }
@@ -735,19 +749,21 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         return;
     }
     // hide functionality of Telegram
-//    else if ([user.telegramRegistered isEqualToString:@"0"] && [user.telegramRegistrationRequired isEqualToString:@"1"]) {
-//        [self showTelegramPopup:user];
-//        return;
-//    }
+    //    else if ([user.telegramRegistered isEqualToString:@"0"] && [user.telegramRegistrationRequired isEqualToString:@"1"]) {
+    //        [self showTelegramPopup:user];
+    //        return;
+    //    }
     
     NSString *status = sender.isOnLine ? OFFLINE : ONLINE;
     [self.cancelRideBarButton showLoading];
     [self updateStatus:status];
 }
-- (IBAction)menuBtnPressed:(id)sender{
+
+- (IBAction)menuBtnPressed:(id)sender {
     [self toggleShowMenuView];
 }
-- (void)toggleShowMenuView{
+
+- (void)toggleShowMenuView {
     [UIView animateWithDuration:0.8 delay:0.4 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         if (self.menuView.isShown) {
             self.leading.constant = - (ViewWidth(self.view) + 20);
@@ -761,7 +777,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     } completion:^(BOOL finished) {
     }];
 }
--(void)showView:(NSString *)identifier url:(nullable NSURL *)url{
+
+-(void)showView:(NSString *)identifier url:(nullable NSURL *)url {
     //    DLog(@"** wk identifier: %@", identifier);
     [self toggleShowMenuView];
     if (url) {
@@ -777,6 +794,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
     //[self pushwithIdentifier:identifier];
 }
+
 -(void)walletsClick {
     //    DLog("** wk click wallet success");
     [self toggleShowMenuView];
@@ -806,8 +824,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }];
     [self.navigationController pushViewController:walletVC animated:true];
 }
--(void) pushToDriverAvailability
-{
+
+-(void) pushToDriverAvailability {
     UIDriverAvailabilityViewController *driverVC = [[UIDriverAvailabilityViewController alloc] init];
     //    [walletVC setHandler:^(NSDictionary *data) {
     //        DLog("** wk data: %@", data);
@@ -817,19 +835,19 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     //    }];
     [self.navigationController pushViewController:driverVC animated:true];
 }
--(void)pushwithIdentifier:(NSString *)identifier{
+
+-(void)pushwithIdentifier:(NSString *)identifier {
     UIViewController *controller = instantiateVC(identifier);
     [self.navigationController pushViewController:controller animated:YES];
 }
-- (void)didReceiveMemoryWarning
-{
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
+
 #pragma mark - Profil Detail
 
--(void)fetchProfileDetail
-{
+-(void)fetchProfileDetail {
     
     NSMutableDictionary *params=[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"getProfile",@"command",SHAREMANAGER.userId,@"user_id", nil];
     
@@ -877,10 +895,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                                 identifier = @"ShowDocumentsVC";
                             }else if (user.picNeme.isEmpty) {
                                 identifier = SHOWPROFILE;
-                            } 
-//                            else if ([user.infoMessage isEqualToString:@"CreditCardRequired"]) {
-//                                identifier = @"ShowCountrySelectionVC";
-//                            }
+                            }
+                            //                            else if ([user.infoMessage isEqualToString:@"CreditCardRequired"]) {
+                            //                                identifier = @"ShowCountrySelectionVC";
+                            //                            }
                             
                             if (!identifier.isEmpty) {
                                 [self performSegueWithIdentifier:identifier sender:self];
@@ -890,9 +908,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                 }];
             } else {
                 // hide functionality of Telegram
-//                if ([user.telegramRegistered isEqualToString:@"0"] && !self.isShowTelegramPopupFirstTime) {
-//                    [self showTelegramPopup:user];
-//                }
+                //                if ([user.telegramRegistered isEqualToString:@"0"] && !self.isShowTelegramPopupFirstTime) {
+                //                    [self showTelegramPopup:user];
+                //                }
             }
             if (strEquals(status, ONLINE)) {
                 [self showStatusButton:GO_ONLINE];
@@ -968,27 +986,28 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 #pragma mark FareView
 
--(void)showFareAndRatingView{
-    if ([self.navigationController.visibleViewController isKindOfClass:[FareAndRatingView class]]) {
-        return;
-    }
-    
-    for (UIViewController *viewController in self.navigationController.viewControllers) {
-        if ([viewController isKindOfClass:[FareAndRatingView class]]) {
-            // FareAndRatingView is already in the navigation stack, no need to perform the segue
+-(void)showFareAndRatingView {
+    if (![self.arraySubmitOrders containsObject:self.selectedOrder.orderId]) {
+        if ([self.navigationController.visibleViewController isKindOfClass:[FareAndRatingView class]]) {
             return;
         }
+        
+        for (UIViewController *viewController in self.navigationController.viewControllers) {
+            if ([viewController isKindOfClass:[FareAndRatingView class]]) {
+                // FareAndRatingView is already in the navigation stack, no need to perform the segue
+                return;
+            }
+        }
+        
+        [self hideClientView];
+        [self mainSetup];
+        [self driverLocationWithAddress];
+        
+        [self performSegueWithIdentifier:FARE_Idintifire sender:self];
     }
-    
-    [self hideClientView];
-    [self mainSetup];
-    [self driverLocationWithAddress];
-    [self performSegueWithIdentifier:FARE_Idintifire sender:self];
-    
-    
 }
 
--(void)invalidateLocationTimer{
+-(void)invalidateLocationTimer {
     UA_invalidateTimer(DELG.updLoctionTimer);
     [DELG.updLoctionTimer invalidate];
     //    [DELG.coordinatepdLoctionTimer invalidate];
@@ -997,16 +1016,17 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
 }
 
--(void)invalidateDriverCoordinateLocationTimer{
+-(void)invalidateDriverCoordinateLocationTimer {
     UA_invalidateTimer(DELG.coordinatepdLoctionTimer);
     [DELG.coordinatepdLoctionTimer invalidate];
     DELG.coordinatepdLoctionTimer = nil;
     
 }
+
 #pragma mark -
 #pragma mark - update driver location
 
--(void)startTimer{
+-(void)startTimer {
     if (DELG.updLoctionTimer.isValid) {
         return;
     }
@@ -1022,7 +1042,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
 }
 
--(void)startCoordinateUpdateTimer{
+-(void)startCoordinateUpdateTimer {
     if (DELG.coordinatepdLoctionTimer.isValid) {
         return;
     }
@@ -1036,7 +1056,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                                                                     repeats:YES];
     [self driverCoordinatesUpdate];
 }
--(void)startMarkerTimer{
+
+-(void)startMarkerTimer {
     
     BOOL isOffline =  user_defaults_get_bool(ISOFFLINE);
     if (self.locationTracker.isInbackground || isOffline) {
@@ -1054,8 +1075,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     DLog(@"startMarkerTimer  Called");
     
 }
--(void)driverCurrentLocation
-{
+
+-(void)driverCurrentLocation {
     DLog(@"wk call driverCurrentLocation");
     [self startMarkerTimer];
     if (!self.isLocationChanged) {
@@ -1108,8 +1129,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     });
 }
 
--(void)driverCoordinatesUpdate
-{
+-(void)driverCoordinatesUpdate {
     DLog(@"wk call driverCurrentLocationCoordinateswk");
     
     if (!self.isLocationChanged) {
@@ -1187,7 +1207,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
     NSString *commandKey = (self.isWebSocketConnected ? @"type" : @"command");
     NSDictionary *params = @{
-        commandKey  : @"update_driver_location",
+        commandKey  :   self.isWebSocketConnected ? @"update_driver_location_optimized" : @"getOptimizedDriversLiveOrders",// @"update_driver_location",
         @"user_id"  :   SHAREMANAGER.userId,
         @"lat"      :  (testUser ? CustomLocation.lati : latlong[0]),
         @"long"     :  (testUser ? CustomLocation.longi : latlong[1]),
@@ -1202,11 +1222,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     } else {
         [self updateDriverLocationAndGetOrdersByAlamofire:params];
     }
-    
 }
 
 -(void) updateDriverLocationAndGetOrdersByAlamofire: (NSDictionary *)params {
-    [AlamofireWrapper performJSONRequestWithMethod:RequestMethodPost
+    [AlamofireWrapper performJSONRequestWithMethod:RequestMethodGet
                                          urlString:@"https://www.xpeats.com/api/index.php"
                                         parameters:params
                                           encoding:RequestParameterEncodingJson
@@ -1237,54 +1256,11 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                 self.request = [[RideRequest alloc] initWithAttribute:res];
                 
                 self.orders = self.request.orders;
-                NSLog(@"** wk map drawPinsOnMap from updateDriverLocationGetOrdersResponse");
-                [self drawPinsOnMap];
-                [self postNotificationToOrdersViewController:self.orders];
-                self.viewOrderListButton.hidden = self.orders.count <= 1;
-                
-                NSString *isOnline = user_defaults_get_string(ISONLINE);
-                NSString *isOffline = user_defaults_get_string(ISOFFLINE);
-                
-                [self showStatusButton:isOnline ? GO_ONLINE : GO_OFFLINE];
-                if (self.orders.count <= 1) {
-                    [self hideOrdersScreen];
-                }
-                else if (self.orders.count > 1){
-                    if (self.shouldShowOrders == true) {
-                        self.shouldShowOrders = false;
-                        [self showOrdersScreen];
-                    }
-                    
-//                    [self.constraintBottomOptions setConstant:0.0];
-//                    [self.bookingView popDown];
-                }
-                int acceptedOrderCount = [self checkAcceptedOrderCount];
-                if (acceptedOrderCount == 0 && self.clientViewTop.constant == 0) {
-                    [self hideClientView];
-                }
-                
-                [self checkDriverIsOnMapScreen];
-                [self setRequestData];
-                [self.locationTracker removeAllSavedLocation];
+                NSLog(@"** wk map drawPinsOnMap from updateDriverLocationGetOrdersResponse: %@", res);
+                [self configOrdersViews];
                 
             } else {
-                NSString *isOnline = user_defaults_get_string(ISONLINE);
-                NSString *isOffline = user_defaults_get_string(ISOFFLINE);
-                
-                [self hideClientView];
-                
-                [self showStatusButton:isOnline ? GO_ONLINE : GO_OFFLINE];
-                self.orders = [[NSMutableArray alloc] init];
-                [self postNotificationToOrdersViewController:self.orders];
-                
-                if (user_defaults_get_object(UD_REQUEST)){
-                    [self stopCountdownTimerAndPlayer];
-                    [SHAREMANAGER removeObjectFromUD:UD_REQUEST];
-                    [self mainSetup];
-                    [self removeCancelRideButtonFromNavigationBar];
-                    [self clearMapView];
-                    [self fetchProfileDetail];
-                }
+                [self configZeroOrdersViews];
             }
         });
     } else {
@@ -1294,7 +1270,59 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
 }
 
-- (void)acceptOrderByQrCode:(NSString *) orderId{
+-(void) configZeroOrdersViews {
+    NSString *isOnline = user_defaults_get_string(ISONLINE);
+    NSString *isOffline = user_defaults_get_string(ISOFFLINE);
+    
+    [self hideClientView];
+    
+    [self showStatusButton:isOnline ? GO_ONLINE : GO_OFFLINE];
+    self.orders = [[NSMutableArray alloc] init];
+    self.viewOrderListButton.hidden = self.orders.count <= 1;
+    [self postNotificationToOrdersViewController:self.orders];
+    
+    if (user_defaults_get_object(UD_REQUEST)){
+        [self stopCountdownTimerAndPlayer];
+        [SHAREMANAGER removeObjectFromUD:UD_REQUEST];
+        [self mainSetup];
+        [self removeCancelRideButtonFromNavigationBar];
+        [self clearMapView];
+        [self fetchProfileDetail];
+    }
+}
+
+-(void) configOrdersViews {
+    [self drawPinsOnMap];
+    [self postNotificationToOrdersViewController:self.orders];
+    self.viewOrderListButton.hidden = self.orders.count <= 1;
+    
+    NSString *isOnline = user_defaults_get_string(ISONLINE);
+    NSString *isOffline = user_defaults_get_string(ISOFFLINE);
+    
+    [self showStatusButton:isOnline ? GO_ONLINE : GO_OFFLINE];
+    if (self.orders.count <= 1) {
+        [self hideOrdersScreen];
+    }
+    else if (self.orders.count > 1){
+        if (self.shouldShowOrders == true) {
+            self.shouldShowOrders = false;
+            [self showOrdersScreen];
+        }
+        
+        //                    [self.constraintBottomOptions setConstant:0.0];
+        //                    [self.bookingView popDown];
+    }
+    int acceptedOrderCount = [self checkAcceptedOrderCount];
+    if (acceptedOrderCount == 0 && self.clientViewTop.constant == 0) {
+        [self hideClientView];
+    }
+    
+    [self checkDriverIsOnMapScreen];
+    [self setRequestData];
+    [self.locationTracker removeAllSavedLocation];
+}
+
+- (void)acceptOrderByQrCode:(NSString *) orderId {
     [self showHud];
     NSString  *dcoordi  = user_defaults_get_string(D_COORDINATE);
     
@@ -1311,7 +1339,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
     NSArray *latlong= [self.driverCoordinate componentsSeparatedByString:@","];
     NSMutableDictionary *params=[[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                 @"acceptOrderByQrCode",@"command",
+                                     @"acceptOrderByQrCodeOptimized",@"command",
                                  SHAREMANAGER.userId,@"driver_id",
                                  (testUser ? CustomLocation.lati : latlong[0]),@"lat",
                                  (testUser ? CustomLocation.longi : latlong[1]),@"long",
@@ -1332,6 +1360,11 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         DLog(@"Message %@",json);
         [self hideHud];
         if ([json[@"success"] intValue] == 1){
+            NSDictionary *orderData = [[json[@"data"] firstObject] dictionaryByReplacingNullsWithBlanks];
+            Order *order = [[Order alloc] initWithAtrribute:orderData];
+            
+            [self.orders addObject:order];
+            [self configOrdersViews];
             NSString *message = [NSString stringWithFormat:@"#%@ order added", orderId];
             [BannerUtil.shared showBannerAlerrtWithType:BannerStyleSuccess message:message onTap:nil];
             [self updateDriverLocationAndGetOrdersApi:true];
@@ -1339,8 +1372,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             NSString *message = [NSString stringWithFormat:@"%@ %@", orderId, [json objectForKey:@"msg"]];
             [BannerUtil.shared showBannerAlerrtWithType:BannerStyleWarning message:message onTap:nil];
             
-//            NSString *msg = [NSString stringWithFormat:@"[%@] %@", orderId, [json objectForKey:@"msg"]];
-//            [CommonFunctions showAlertWithTitel:@"Order Error" message:msg inVC:SHAREMANAGER.rootViewController];
+            //            NSString *msg = [NSString stringWithFormat:@"[%@] %@", orderId, [json objectForKey:@"msg"]];
+            //            [CommonFunctions showAlertWithTitel:@"Order Error" message:msg inVC:SHAREMANAGER.rootViewController];
         }
     }
                                            failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
@@ -1356,10 +1389,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSString *errorMsg = errorDescription;
     if ([errorMsg isEqualToString:@"You are disabled"]){
         [self clearUserCacheData];
-//        [self invalidateLocationTimer];
-//        UA_invalidateTimer(self.markerTimer);
-//        [SHAREMANAGER clearUserDefault];
-//        [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+        //        [self invalidateLocationTimer];
+        //        UA_invalidateTimer(self.markerTimer);
+        //        [SHAREMANAGER clearUserDefault];
+        //        [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
     }
     else if ([errorMsg isEqualToString:@"you are offline"] || [errorMsg isEqualToString:@"user not exist"]){
         user_defaults_set_bool(ISONLINE, NO);
@@ -1403,10 +1436,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSString *errorMsg = errorDescription;
     if ([errorMsg isEqualToString:@"You are disabled"]){
         [self clearUserCacheData];
-//        [self invalidateLocationTimer];
-//        UA_invalidateTimer(self.markerTimer);
-//        [SHAREMANAGER clearUserDefault];
-//        [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+        //        [self invalidateLocationTimer];
+        //        UA_invalidateTimer(self.markerTimer);
+        //        [SHAREMANAGER clearUserDefault];
+        //        [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
     }
     else if ([errorMsg isEqualToString:@"you are offline"] || [errorMsg isEqualToString:@"user not exist"]){
         user_defaults_set_bool(ISONLINE, NO);
@@ -1431,7 +1464,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     DLog(@"errorMsg :%@",errorMsg);
 }
 
-- (void) driverCoordinateUpdateApi{
+- (void) driverCoordinateUpdateApi {
     NSString  *dAddress = user_defaults_get_string(D_ADDRESS);
     NSString  *dcoordi  = user_defaults_get_string(D_COORDINATE);
     
@@ -1481,31 +1514,81 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }];
 }
 
--(void) updateDriverCoordinatesResponse: (NSDictionary *)json {
-    
+- (void)updateDriverCoordinatesResponse:(NSDictionary *)json {
+    // Check if session is still active
     if (![self checkUserSessionActive:json]) {
         return;
     }
-    
-    if ([json[@"success"] intValue] == 1){
-        
-        NSNumber *dataValue = json[@"data"];
+
+    // Check if success == 1
+    if ([json[@"success"] intValue] == 1) {
+        id dataValue = json[@"data"];
+        NSUInteger dataCount = 0;
+
+        // Log the type for debugging
+        NSLog(@"Data value: %@, class: %@", dataValue, [dataValue class]);
+
+        // Handle NSNumber
         if ([dataValue isKindOfClass:[NSNumber class]]) {
-            NSString *isOnline = user_defaults_get_string(ISONLINE);
-            if (![isOnline isEqualToString:@"0"]) {
-                if (self.orders.count != [dataValue unsignedIntegerValue]) {
-                    NSLog(@"Value: done");
-                    [self updateDriverLocationAndGetOrdersApi:true];
-                }
-                //                else {
-                //                    NSLog(@"Value: fail");
-                //                }
+            dataCount = [dataValue unsignedIntegerValue];
+        }
+        // Handle NSString with number inside
+        else if ([dataValue isKindOfClass:[NSString class]]) {
+            // Optional: strict check for numeric string
+            NSCharacterSet *nonDigitSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            if ([dataValue rangeOfCharacterFromSet:nonDigitSet].location == NSNotFound) {
+                dataCount = [(NSString *)dataValue integerValue];
+            } else {
+                NSLog(@"Data value string is not numeric: %@", dataValue);
+                return;
             }
-        } else {
-            NSLog(@"No data found or data is not in the expected format.");
+        }
+        // Unsupported data type
+        else {
+            NSLog(@"Unexpected type for 'data': %@", [dataValue class]);
+            return;
+        }
+
+        NSLog(@"Parsed data count: %lu", (unsigned long)dataCount);
+
+        // Check online status
+        NSString *isOnline = user_defaults_get_string(ISONLINE);
+        if (![isOnline isEqualToString:@"0"]) {
+            if (self.orders.count != dataCount) {
+                NSLog(@"Value: done");
+                [self updateDriverLocationAndGetOrdersApi:true];
+            } else {
+                NSLog(@"Orders count matched. No update needed.");
+            }
         }
     }
 }
+
+//-(void) updateDriverCoordinatesResponse: (NSDictionary *)json {
+//    
+//    if (![self checkUserSessionActive:json]) {
+//        return;
+//    }
+//    
+//    if ([json[@"success"] intValue] == 1){
+//        
+//        NSNumber *dataValue = json[@"data"];
+//        if ([dataValue isKindOfClass:[NSNumber class]]) {
+//            NSString *isOnline = user_defaults_get_string(ISONLINE);
+//            if (![isOnline isEqualToString:@"0"]) {
+//                if (self.orders.count != [dataValue unsignedIntegerValue]) {
+//                    NSLog(@"Value: done");
+//                    [self updateDriverLocationAndGetOrdersApi:true];
+//                }
+//                //                else {
+//                //                    NSLog(@"Value: fail");
+//                //                }
+//            }
+//        } else {
+//            NSLog(@"No data found or data is not in the expected format.");
+//        }
+//    }
+//}
 
 - (void)checkIsAppNeedToUpdate {
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -1516,20 +1599,20 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
     DLog(@"wk PARAMS %@",params);
     
-//    [self fetchAppStoreVersionWithCompletion:^(NSString * _Nullable appStoreVersion) {
-//        if (appStoreVersion) {
-//            NSLog(@"App Store Version: %@", appStoreVersion);
-//            
-//            NSString *localVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-//            if (![localVersion isEqualToString:appStoreVersion]) {
-//                NSLog(@"A new version is available: %@", appStoreVersion);
-//            } else {
-//                NSLog(@"Your app is up to date.");
-//            }
-//        } else {
-//            NSLog(@"Failed to fetch App Store version.");
-//        }
-//    }];
+    //    [self fetchAppStoreVersionWithCompletion:^(NSString * _Nullable appStoreVersion) {
+    //        if (appStoreVersion) {
+    //            NSLog(@"App Store Version: %@", appStoreVersion);
+    //
+    //            NSString *localVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    //            if (![localVersion isEqualToString:appStoreVersion]) {
+    //                NSLog(@"A new version is available: %@", appStoreVersion);
+    //            } else {
+    //                NSLog(@"Your app is up to date.");
+    //            }
+    //        } else {
+    //            NSLog(@"Failed to fetch App Store version.");
+    //        }
+    //    }];
     
     
     [AlamofireWrapper checkAppVersionApiWithCompletion:^(NSString *isNewVersion){
@@ -1540,26 +1623,26 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         }
     }];
     
-//    [AlamofireWrapper performJSONRequestWithMethod:RequestMethodPost
-//                                         urlString:@"https://www.xpeats.com/api/index.php"
-//                                        parameters:params
-//                                          encoding:RequestParameterEncodingJson
-//                                           headers:nil
-//                                           success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, NSDictionary * _Nonnull json) {
-//        // Handle success
-//        if ([json[@"success"] intValue] == 1){
-//            //            DLog(@"** wk json: %@", json);
-//            NSNumber *value = json[@"data"];
-//            //            DLog(@"** wk value: %@", value);
-//            if ([value isEqualToNumber:@1]) {
-//                [self openAppUpdatePopup];
-//            }
-//        }
-//    }
-//                                           failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
-//        // Handle failure
-//        DLog(@"Error: %@", error.localizedDescription);
-//    }];
+    //    [AlamofireWrapper performJSONRequestWithMethod:RequestMethodPost
+    //                                         urlString:@"https://www.xpeats.com/api/index.php"
+    //                                        parameters:params
+    //                                          encoding:RequestParameterEncodingJson
+    //                                           headers:nil
+    //                                           success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, NSDictionary * _Nonnull json) {
+    //        // Handle success
+    //        if ([json[@"success"] intValue] == 1){
+    //            //            DLog(@"** wk json: %@", json);
+    //            NSNumber *value = json[@"data"];
+    //            //            DLog(@"** wk value: %@", value);
+    //            if ([value isEqualToNumber:@1]) {
+    //                [self openAppUpdatePopup];
+    //            }
+    //        }
+    //    }
+    //                                           failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
+    //        // Handle failure
+    //        DLog(@"Error: %@", error.localizedDescription);
+    //    }];
 }
 
 - (void)postNotificationToOrdersViewController:(NSMutableArray *)orders{
@@ -1573,10 +1656,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
 }
 #pragma mark -
--(void)setRequestData{
+-(void)setRequestData {
     [self rideRequestSetup];
 }
-- (void)checkDriverIsOnMapScreen{
+- (void)checkDriverIsOnMapScreen {
     if (self.request.isNewOrder) {
         [self showNewOrderVC];
         return;
@@ -1586,10 +1669,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             return;
         }
         [self showNewOrderVC];
-        
     }
 }
-- (void)showNewOrderVC{
+
+- (void)showNewOrderVC {
     if ([SHAREMANAGER.rootViewController isKindOfClass:[JobRequestView class]]) {
         return;
     }
@@ -1602,12 +1685,14 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:jobVC animated:YES completion:nil];
 }
-- (void)dismissJobRequestVC{
+
+- (void)dismissJobRequestVC {
     if ([SHAREMANAGER.rootViewController isKindOfClass:[JobRequestView class]]) {
         [jobVC dismiss];
     }
 }
--(void)rideRequestSetup{
+
+-(void)rideRequestSetup {
     [self clientSetup];
     if (self.request.deliverdOrder != nil) {
         self.selectedOrder = self.request.deliverdOrder;
@@ -1668,10 +1753,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         
         
     }
-    
-    
 }
--(void)clearPolyLine{
+
+-(void)clearPolyLine {
     if (pickupMarker.map) {
         pickupMarker.map = nil;
         
@@ -1679,9 +1763,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     if (_polyline.map) {
         _polyline.map = nil;
     }
-    
 }
--(void)clientSetup{
+
+-(void)clientSetup {
     self.clientView.delegate = self;
     [self.clientView setup:self.request.order totalEarning:[self calculateDriverEarning]];
 }
@@ -1699,7 +1783,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self.lblTotalEarnings setText:[NSString stringWithFormat:@"%@%.2f", self.request.order.currrencySymbol, total]];
     return strTotalEarnings;
 }
-- (void)hideClientView{
+
+- (void)hideClientView {
     [self.mainTitelLabel setTextWithAnimation:@""];
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.3
@@ -1707,9 +1792,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         self.clientViewTop.constant = -(self.navigationBarHeight  + ViewHeight(self.clientView));
         [self.view layoutIfNeeded]; // Called on parent view
     }];
-    
 }
-- (void)showClientView{
+
+- (void)showClientView {
     [self.mainTitelLabel setTextWithAnimation:@""];
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.3
@@ -1717,11 +1802,12 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         self.clientViewTop.constant = 0;
         [self.view layoutIfNeeded]; // Called on parent view
     }];
-    
 }
+
 #pragma mark - draw Route
 #pragma mark -
-- (BOOL)isNeedtoDrawRoute{
+
+- (BOOL)isNeedtoDrawRoute {
     if (self.isPickupChenged || self.isDropChanged) {
         return YES;
     }
@@ -1732,7 +1818,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
     
 }
-- (void)drawRoute{
+
+- (void)drawRoute {
     CLLocationCoordinate2D coordinate1  = [SHAREMANAGER getCoodrinateFromSrting:self.driverCoordinate];
     CLLocationCoordinate2D coordinate2  = CLLocationCoordinate2DMake(0.0,0.0);
     if (self.driverMarker.map == nil) {
@@ -1787,7 +1874,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     //  [self focusMapToShowAllMarkers];
 }
 
--(void)drawRouteOnMap{
+-(void)drawRouteOnMap {
     NSArray *parameters = [NSArray arrayWithObjects:SENSOR, _coordinates,
                            nil];
     NSArray *keys = [NSArray arrayWithObjects:@"sensor", @"waypoints", nil];
@@ -1800,6 +1887,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                withDelegate:self];
     
 }
+
 - (void)addDirections:(NSDictionary *)json {
     
     NSArray *route = [json objectForKey:@"routes"];
@@ -1823,7 +1911,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         
     }
 }
-- (void)focusMapToShowAllMarkers{
+
+- (void)focusMapToShowAllMarkers {
     if (markers.count == 0) {return;}
     GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] init];
     for (GMSMarker *marker in markers){
@@ -1831,7 +1920,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
     [_mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:bounds withEdgeInsets:UIEdgeInsetsZero]];
 }
-- (void)drawPolyLineOnPath:(GMSMutablePath *)path{
+
+- (void)drawPolyLineOnPath:(GMSMutablePath *)path {
     _polyline = [GMSPolyline new];
     _polyline.path         = path;
     _polyline.strokeWidth  = 4;
@@ -1843,7 +1933,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     markers           = [NSMutableArray new];
     // self.polylineTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 repeats:true block:^(NSTimer * _Nonnull timer) {    [self animate:path]; }];
 }
-- (void)removeTraviledPath{
+
+- (void)removeTraviledPath {
     DLog(@"before self.path.count %@",@(self.path.count));
     for (int i = 0; i <= self.path.count; i++) {
         CLLocationCoordinate2D pathCoordinate = [self.path coordinateAtIndex:i];
@@ -1859,19 +1950,18 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             break;
         }
     }
-    
 }
--(void)stopCountdownTimerAndPlayer
-{
+
+-(void)stopCountdownTimerAndPlayer {
     if(self.theAudio.playing){
         [self.theAudio stop];
     }
     UA_invalidateTimer(self.countdownTimer)
 }
 
-
 #pragma mark - Countdown timer
-- (void)startCountdown{
+
+- (void)startCountdown {
     if (self.countdownTimer.isValid) {
         return;
     }
@@ -1885,12 +1975,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                                                          selector:@selector(counterstart)
                                                          userInfo:nil
                                                           repeats:YES];
-    
-    
 }
 
--(void)counterstart
-{
+-(void)counterstart {
     [self.countdownLable setAlpha:1.0];
     [self setCounter:(_counter -1)];
     [self playSoundWithName:BOOKING_SOUND];
@@ -1899,12 +1986,15 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         [self skipedSetup:NO];
     }
 }
+
 #pragma mark- ClintViewDelegate
-- (void)backToMapScreen{
+
+- (void)backToMapScreen {
     NSMutableArray *viewCntrollers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers.mutableCopy];
     [self.navigationController popToViewController:viewCntrollers[0] animated:NO];
 }
-- (void)skipedSetup:(BOOL)isNewOrder{
+
+- (void)skipedSetup:(BOOL)isNewOrder {
     if (!isNewOrder) {
         [self mainSetup];
         [self stopCountdownTimerAndPlayer];
@@ -1919,11 +2009,35 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         NSLog(@"Do some work");
         [self updateActivityStatus:KOrderStatusSkiped sender:[RoundedButton new]];
     });
-    
 }
+
+#pragma mark- FareAndRatingViewDelegate
+
+- (void)deleteOrder:(Order *)order {
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Order *evaluatedObject, NSDictionary *bindings) {
+        return ![evaluatedObject.orderId isEqualToString:order.orderId];
+    }];
+    self.orders = [[self.orders filteredArrayUsingPredicate:predicate] mutableCopy];
+    BOOL hasActiveOrder = NO;
+    for (Order *order in self.orders) {
+        if (order.isActive) {
+            hasActiveOrder = YES;
+            break;
+        }
+    }
+
+    if (!hasActiveOrder && self.orders.count > 0) {
+        Order *firstOrder = self.orders[0];
+        firstOrder.isActive = 1;
+        self.orders[0] = firstOrder;
+    }
+    [self configOrdersViews];
+//            [self postNotificationToOrdersViewController:self.orders]; // waseem udpate
+}
+
 #pragma mark- Driver Activity
-- (IBAction)viewBookingBtnPressed:(RoundedButton *)sender
-{
+
+- (IBAction)viewBookingBtnPressed:(RoundedButton *)sender {
     NSString *titel = sender.currentTitle;
     DLog(@"wk order detail status: %@, tag: %ld", titel, (long)sender.tag);
     if (strEquals(titel, VIEW_BOOKING) || strEquals(titel, Accept_Order)){
@@ -1981,6 +2095,14 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             codCheck.address = self.driverAddress;
             [codCheck setHandlerSuccess:^(NSDictionary * _Nonnull data) {
                 NSLog(@"Handler success data: %@", data);
+                dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC));
+                dispatch_after(delay, dispatch_get_main_queue(), ^{
+                    // Your action here
+                    NSLog(@"Action after 1 second");
+                    Order *order = [[Order alloc] initWithAtrribute:[data dictionaryByReplacingNullsWithBlanks]];
+                    [self pushToFareAndRank:self.selectedOrder];
+                });
+                
                 [self updateDriverLocationAndGetOrdersApi:false];
 //                Order *order = [[Order alloc] initWithAtrribute:data];
 //                [self pushToFareAndRank:order];
@@ -2001,15 +2123,13 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                         [self showOrdersScreen];
                         
                     }
-                    
                 }
             }];
         }
     }
-    
-    
 }
-- (void)setBtnTittel:(NSString *)titel{
+
+- (void)setBtnTittel:(NSString *)titel {
     [self.passButton setHidden:strNotEquals(titel, Accept_Order)];
     DLog(@"wk title: %@", titel);
     if (self.viewBookingBtn.isLoading) {
@@ -2027,7 +2147,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
     [self.viewBookingBtn setEnabled:YES];
 }
-- (BOOL)isMoreOrderFormSameRestuarent{
+
+- (BOOL)isMoreOrderFormSameRestuarent {
     if (self.orders.count == 1) {
         return NO;
     }
@@ -2035,7 +2156,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSArray *filteredArray = [self.orders filteredArrayUsingPredicate:predicate];
     return filteredArray.count != 0;
 }
-- (NSInteger)isMoreOrderFormSameRestuarentSameStatus{
+
+- (NSInteger)isMoreOrderFormSameRestuarentSameStatus {
     if (self.orders.count == 1) {
         return NO;
     }
@@ -2046,7 +2168,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSArray *statusFilteredArray = [filteredArray filteredArrayUsingPredicate:statuspredicate];
     return statusFilteredArray.count ;
 }
-- (BOOL)isMoreDeliveriesForSameUser{
+
+- (BOOL)isMoreDeliveriesForSameUser {
     if (self.orders.count == 1) {
         return NO;
     }
@@ -2054,21 +2177,21 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSArray *filteredArray = [self.orders filteredArrayUsingPredicate:predicate];
     return filteredArray.count != 0;
 }
-- (IBAction)currentLocationBtnPressed:(id)sender{
+
+- (IBAction)currentLocationBtnPressed:(id)sender {
     if (self.isDirectionBtn) {
         [self openDirectionsInGoogleMaps];
     }else{
         [self.mapView animateToLocation:self.locationTracker.currentLocation];
     }
-    
 }
 
-- (IBAction)onClickProjectedEarningViewExpand:(id)sender{
+- (IBAction)onClickProjectedEarningViewExpand:(id)sender {
     [self updateProjectedEarningViewHeight: self.mapView.frame.size.height / 2];
     
 }
 
-- (IBAction)onClickProjectedEarningViewClose:(id)sender{
+- (IBAction)onClickProjectedEarningViewClose:(id)sender {
     [self updateProjectedEarningViewHeight: 0];
 }
 
@@ -2086,7 +2209,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self showAlertForScanAndInputOrder];
 }
 
-- (IBAction)onClickScan:(id)sender{
+- (IBAction)onClickScan:(id)sender {
     //    DLog(@"** wk scan click done");
     [self showAlertForScanAndInputOrder];
 }
@@ -2119,7 +2242,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void)clearMapView{
+-(void)clearMapView {
     if (markers.count == 0  && _polyline.map == nil) {
         return;
     }
@@ -2128,10 +2251,9 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     _polyline.map   = nil;
     [self.mapView clear];
     [self driverLocationWithAddress];
-    
 }
 
--(void)updateActivityStatus:(KOrderStatus)currentAction sender:(RoundedButton *)sender{
+-(void)updateActivityStatus:(KOrderStatus)currentAction sender:(RoundedButton *)sender {
     BOOL isFormNewJob = (sender.tag == 1000 || sender.tag == 999);
     NSArray *latlong = [self.driverCoordinate componentsSeparatedByString:@","];
     Order *order = self.request.isNewOrder ? self.request.requestedOrder : self.request.order;
@@ -2151,6 +2273,13 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             [self invalidateLocationTimer];
             [self startTimer];
         }
+        
+        // waseem need to update
+        
+        // update order
+        // accept order
+        // deliver date (delete order)
+        
         DLog(@"wk updateActivityStatus result json: %@", json);
         if (json != nil && ![json objectForKey:@"error"]){
             if (currentAction == KOrderStatusSkiped || currentAction == KOrderStatusRejected) {
@@ -2165,7 +2294,6 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                     [sender hideLoading];
                     [self dismissJobRequestVC];
                 }
-                
             }
             else if (currentAction == KOrderStatusAccepted) {
                 if (!isFormNewJob) {
@@ -2187,6 +2315,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                         self.request = [[RideRequest alloc] initWithAttribute:res];
                         
                         self.orders = self.request.orders;
+                        self.viewOrderListButton.hidden = self.orders.count <= 1;
                         NSLog(@"** wk map drawPinsOnMap from updateActivityStaus");
                         [self drawPinsOnMap];
                         [self postNotificationToOrdersViewController:self.orders];
@@ -2206,15 +2335,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
                 }
             }else if (currentAction == KOrderStatusReached){
                 [self.viewBookingBtn hideLoadingWithTitel:Order_Picked_UP ];
-                
             }else if (currentAction == KOrderStatusPickedup){
                 [self.viewBookingBtn hideLoadingWithTitel:Order_Delivered];
-                
-                
             }else if (currentAction == KOrderStatusPickedup){
                 [self.viewBookingBtn hideLoadingWithTitel:Order_Delivered];
-                
-                
             }
         }else{
             NSString *errorMsg = [json objectForKey:@"error"] ;
@@ -2230,7 +2354,6 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         [self handleUpdateActivityStatusError:error.localizedDescription currentAction:currentAction sender:sender];
         DLog(@"Error: %@", error.localizedDescription);
     }];
-    
 }
 
 -(void) handleUpdateActivityStatusError: (NSString *)errorDescription currentAction: (KOrderStatus) currentAction sender: (RoundedButton *)sender {
@@ -2258,7 +2381,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 #pragma mark - StatusViewDelegate
 
--(void)updateStatus:(NSString *)status{
+-(void)updateStatus:(NSString *)status {
     if (self.menuView.isShown) {[self toggleShowMenuView];}
     NSMutableDictionary *params=[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"updateStatus",@"command",SHAREMANAGER.userId,@"user_id",status,@"road_status", nil];
     DLog(@"wk params updateStatus: %@", params);
@@ -2321,7 +2444,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }];
 }
 
-- (void)offlineSetup{
+- (void)offlineSetup {
     user_defaults_set_bool(ISONLINE, NO);
     user_defaults_set_bool(ISOFFLINE, YES);
     user_defaults_remove_object(D_ADDRESS);
@@ -2336,10 +2459,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     [self.locationTracker stopLocationTracking];
     self.driverMarker.map = nil;
 }
+
 #pragma mark - Fetch Drivers
 
--(void)cancelJourneyWithReason:(NSString *)reason
-{
+-(void)cancelJourneyWithReason:(NSString *)reason {
     [self showHud];
     NSMutableDictionary *params=[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"cancel_ride" ,@"command",SHAREMANAGER.userId,@"user_id",reason,@"activity",@"driver",@"user_is", nil];
     
@@ -2365,7 +2488,6 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         // Handle failure
         [self handleCancelJourneyError:error.localizedDescription reason:reason];
     }];
-    
 }
 
 -(void) handleCancelJourneyError: (NSString *)errorDescription reason: (NSString *)reason {
@@ -2382,11 +2504,10 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 
 #pragma mark -
-#pragma mark -GMSMarker InfoWindow
+#pragma mark - GMSMarker InfoWindow
 #pragma mark -
 
-- (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker
-{
+- (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
     
     // Create a custom view for the marker info window
     UIView *infoWindow = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 70)];
@@ -2412,11 +2533,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     return nil;
 }
 
-
-
 // Since we want to display our custom info window when a marker is tapped, use this delegate method
-- (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker
-{
+- (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
     
     // A marker has been tapped, so set that state flag
     self.markerTapped = YES;
@@ -2435,8 +2553,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     return NO;
 }
 
-- (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position
-{
+- (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
     /* if we got here after we've previously been idle and displayed our custom info window,
      then remove that custom info window and nil out the object */
     if(self.idleAfterMovement) {
@@ -2449,8 +2566,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 }
 
 // This method gets called whenever the map was moving but has now stopped
-- (void)mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
-{
+- (void)mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position {
     
     /* if we got here and a marker was tapped and our animate method was called, then it means we're ready
      to show our custom info window */
@@ -2465,8 +2581,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 /* If the map is tapped on any non-marker coordinate, reset the currentlyTappedMarker and remove our
  custom info window from self.view */
-- (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate
-{
+- (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
     if (self.menuView.isShown) {
         [self toggleShowMenuView];
     }
@@ -2476,7 +2591,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     }
     
 }
--(void)mapViewDidFinishTileRendering:(GMSMapView *)mapView{
+
+-(void)mapViewDidFinishTileRendering:(GMSMapView *)mapView {
     GMSVisibleRegion visibleRegion = self.mapView.projection.visibleRegion;
     GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:visibleRegion.nearLeft
                                                                        coordinate:visibleRegion.nearRight];
@@ -2485,10 +2601,12 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 /* When the button is clicked, verify that we've got access to the correct marker.
  You might use this button to push a new VC with detail about that marker onto the navigation stack. */
-- (void)buttonClicked:(id)sender{
+- (void)buttonClicked:(id)sender {
     ////DLog(@"button clicked for this marker: %@",self.currentlyTappedMarker);
 }
+
 #pragma mark IBActions
+
 - (void)signout{
     
     [CommonFunctions showQuestionsAlertWithTitel:@"Are you sure?" message:@"Do you really want to log out?" inVC:self completion:^(BOOL success) {
@@ -2499,8 +2617,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
 }
 
--(void)logout
-{
+-(void)logout {
     
     [self invalidateLocationTimer];
     [self showHud];
@@ -2519,12 +2636,12 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         //////DLog(@"the json return is %@",json);
         if (![json objectForKey:@"error"]&&json!=nil){
             [self clearUserCacheData];
-//            [self offlineSetup];
-//            [self invalidateLocationTimer];
-//            user_defaults_set_bool(ISONLINE, NO);
-//            user_defaults_set_bool(ISOFFLINE, YES);
-//            [self.navigationController setViewControllers:@[instantiateVC(@"MainView")] animated:NO];
-//            [SHAREMANAGER clearUserDefault];
+            //            [self offlineSetup];
+            //            [self invalidateLocationTimer];
+            //            user_defaults_set_bool(ISONLINE, NO);
+            //            user_defaults_set_bool(ISOFFLINE, YES);
+            //            [self.navigationController setViewControllers:@[instantiateVC(@"MainView")] animated:NO];
+            //            [SHAREMANAGER clearUserDefault];
             [self hideHud];
         }else  {
             [CommonFunctions showAlertWithTitel:@"Info" message:[json objectForKey:@"error"] inVC:self];
@@ -2543,7 +2660,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *formattedDate = [dateFormatter stringFromDate:today];
-
+    
     NSMutableDictionary *params=[[NSMutableDictionary alloc]initWithObjectsAndKeys:@"getProjectedEarningForDriver",@"command",SHAREMANAGER.userId,@"driver_id", formattedDate, @"date", nil];
     
     [AlamofireWrapper performJSONRequestWithMethod:RequestMethodPost
@@ -2563,7 +2680,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             } else {
                 [self.lblTotalProjectedEarning setText:@"-"];
             }
-//            [self onClickProjectedEarningViewExpand:[[UIButton alloc] init]];
+            //            [self onClickProjectedEarningViewExpand:[[UIButton alloc] init]];
         }else  {
             [CommonFunctions showAlertWithTitel:@"Info" message:[json objectForKey:@"error"] inVC:self];
             
@@ -2578,11 +2695,11 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 
 
 #pragma Cancel Reason View
--(void)showslectionView{
+-(void)showslectionView {
     [self performSegueWithIdentifier:@"ShowCancelRideVC" sender:self];
     
 }
--(void)viewDidDisappear:(BOOL)animated{
+-(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:YES];
     _polyline.map = nil;
     UA_invalidateTimer(self.markerTimer);
@@ -2608,7 +2725,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     
 }
 #pragma Start Tracking Location
--(void)startTrackingLocation{
+-(void)startTrackingLocation {
     if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied){
         [CommonFunctions showAlertWithTitel:@"" message:@"The app doesn't work without the Background App Refresh enabled. To turn it on, go to Settings > General > Background App Refresh" inVC:[UIApplication sharedApplication].delegate.window.rootViewController completion:nil];
     }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted){
@@ -2622,22 +2739,26 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         
     }
 }
--(void)setHomeLocationBtn{
+
+-(void)setHomeLocationBtn {
     [self.currentLocationBtn setHidden:NO];
     [self.currentLocationBtn setImage:HOME_POINTER forState:UIControlStateNormal];
     
 }
--(void)setDirectionBtn{
+
+-(void)setDirectionBtn {
     [self.currentLocationBtn setHidden:NO];
     [self.currentLocationBtn setImage:HOME_POINTER forState:UIControlStateNormal];
     //* uncomment to use DIRECTION feature
     [self.currentLocationBtn setImage:DIRECTION forState:UIControlStateNormal];
     
 }
--(void)hideDirectionBtn{
+
+-(void)hideDirectionBtn {
     
     [self.currentLocationBtn setHidden:YES];
 }
+
 -(BOOL)isDirectionBtn{
     UIImage *btnImg =[self.currentLocationBtn imageForState:UIControlStateNormal];
     return [SHAREMANAGER image:btnImg isEqualTo:DIRECTION];
@@ -2659,34 +2780,66 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     destination.location = endingLocation;
     directionsDefinition.destinationPoint = destination;
     //    DLog(@"** wk destination queryString: %@, location: %f,%f", destination.queryString, destination.location.latitude, destination.location.longitude);
-    directionsDefinition.travelMode = self.request.order.isEventOrder? kTravelModeWalking: kTravelModeDriving;
+    directionsDefinition.travelMode = self.request.order.isEventOrder ? kTravelModeWalking: kTravelModeDriving;
     [[OpenInGoogleMapsController sharedInstance] openDirections:directionsDefinition];
 }
+
 #pragma  mark - CancelOrderViewControllerDelegate -
-- (void)orderCanceled{
+
+- (void)orderCanceled:(Order *)order {
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Order *evaluatedObject, NSDictionary *bindings) {
+        return ![evaluatedObject.orderId isEqualToString:order.orderId];
+    }];
+    self.orders = [[self.orders filteredArrayUsingPredicate:predicate] mutableCopy];
+    BOOL hasActiveOrder = NO;
+    for (Order *order in self.orders) {
+        if (order.isActive) {
+            hasActiveOrder = YES;
+            break;
+        }
+    }
+
+    if (!hasActiveOrder && self.orders.count > 0) {
+        Order *firstOrder = self.orders[0];
+        firstOrder.isActive = 1;
+        self.orders[0] = firstOrder;
+    }
+    
+    if (self.orders.count > 0) {
+        [self configOrdersViews];
+    } else {
+        [self configZeroOrdersViews];
+    }
+    
     [self updateDriverLocationAndGetOrdersApi:true];
     // [self.navigationController popViewControllerAnimated:YES];
 }
+
 #pragma mark - OrdersViewControllerDelegate -
-- (void)ordersViewControllerDismissed{
+
+- (void)ordersViewControllerDismissed {
     [self hideOrdersScreen];
 }
+
 - (void) pushToFareAndRank:(Order *)order {
     self.selectedOrder = order;
     
     [self showFareAndRatingView];
 }
--(void) changeActiveOrder:(NSDictionary *)data {
-    DLog(@"wk changeActiveOrder");
-    [self updateDriverLocationGetOrdersResponse: data];
-}
-//- (void)changeActiveOrder {
+
+//-(void) changeActiveOrder:(NSDictionary *)data {
 //    DLog(@"wk changeActiveOrder");
-//    [self updateDriverLocationAndGetOrdersApi];
+//    [self updateDriverLocationGetOrdersResponse: data];
 //}
+- (void)changeActiveOrder {
+    DLog(@"wk changeActiveOrder");
+    [self updateDriverLocationAndGetOrdersApi:false];
+}
+
 - (void)clickToNavigate {
     [self openDirectionsInGoogleMaps];
 }
+
 - (void)ShowOrderInfo:(Order *)order{
     self.selectedOrder = order;
     [self performSegueWithIdentifier:@"ShowOrderInfo" sender:self];
@@ -2699,6 +2852,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     updateVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:updateVC animated:YES completion:nil];
 }
+
 -(void)clickOnMessageButton:(Order *)order {
     DLog(@"** wk clickOnMessageButton");
     UIMessageToCustomerViewController *messageVC = [[UIMessageToCustomerViewController alloc] init];
@@ -2735,6 +2889,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 //-(void)scanQrCode:(NSString *)orderId {
 //    [self acceptOrderByQrCode:orderId];
 //}
+
 - (IBAction)orderListButtonPressed:(UIButton *)sender {
     [self showOrdersScreen];
 }
@@ -2749,6 +2904,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     selectedOption   = reason.reason;
     selectedOptionId = reason.reasonId;
 }
+
 #pragma mark - Notifications -
 /* UIApplication specific notifications are used to pause/resume the architect view rendering */
 - (void)didReceiveApplicationWillResignActiveNotification:(NSNotification *)notification{
@@ -2765,8 +2921,8 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
             [self startMarkerTimer];
         }
     }
-    
 }
+
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
@@ -2774,8 +2930,11 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         WebViewController*WVC = (WebViewController *)[segue destinationViewController];
         WVC.webUrl = self.selectedURL;
     }else if ([segue.identifier isEqualToString:FARE_Idintifire]) {
+        NSString *orderId = self.selectedOrder.orderId;
+        [self.arraySubmitOrders addObject:self.selectedOrder.orderId];
         FareAndRatingView *vc = (FareAndRatingView *)[segue destinationViewController];
         vc.order   = self.selectedOrder;
+        vc.delegate = self;
         // vc.message   = _request.message;
     }else if ([[segue destinationViewController] isKindOfClass:[OrderInfoViewController class]]) {
         OrderInfoViewController *vc = (OrderInfoViewController *)[segue destinationViewController];
@@ -2884,7 +3043,7 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
 //        swiftVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
 //        swiftVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 //        [self presentViewController:swiftVC animated:YES completion:nil];
-//        
+//
 //    } else if ([user.telegramRegistrationRequired isEqualToString:@"1"]) {
 //        self.isShowTelegramPopupFirstTime = true;
 //        UITelegramPopupViewController *swiftVC = [[UITelegramPopupViewController alloc] init];
@@ -2899,15 +3058,15 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
     for (UIScene *scene in connectedScenes) {
         if ([scene isKindOfClass:[UIWindowScene class]]) {
             UIWindowScene *windowScene = (UIWindowScene *)scene;
-
+            
             for (UIWindow *window in windowScene.windows) {
                 if (window.isKeyWindow) {
                     UIViewController *rootVC = window.rootViewController;
-
+                    
                     while (rootVC.presentedViewController) {
                         rootVC = rootVC.presentedViewController;
                     }
-
+                    
                     [rootVC dismissViewControllerAnimated:YES completion:nil];
                     return; // Exit after dismissing
                 }
@@ -2934,27 +3093,27 @@ static NSString * const kOpenInMapsSampleURLScheme = @"XP_Driver://";
         [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
     });
     
-//    [self invalidateLocationTimer];
-//    UA_invalidateTimer(self.markerTimer);
-//    [SHAREMANAGER clearUserDefault];
-//    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+    //    [self invalidateLocationTimer];
+    //    UA_invalidateTimer(self.markerTimer);
+    //    [SHAREMANAGER clearUserDefault];
+    //    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
     
-//    [self invalidateLocationTimer];
-//    UA_invalidateTimer(self.markerTimer);
-//    [SHAREMANAGER clearUserDefault];
-//    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+    //    [self invalidateLocationTimer];
+    //    UA_invalidateTimer(self.markerTimer);
+    //    [SHAREMANAGER clearUserDefault];
+    //    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
     
-//    [self offlineSetup];
-//    [self invalidateLocationTimer];
-//    user_defaults_set_bool(ISONLINE, NO);
-//    user_defaults_set_bool(ISOFFLINE, YES);
-//    [self.navigationController setViewControllers:@[instantiateVC(@"MainView")] animated:NO];
-//    [SHAREMANAGER clearUserDefault];
+    //    [self offlineSetup];
+    //    [self invalidateLocationTimer];
+    //    user_defaults_set_bool(ISONLINE, NO);
+    //    user_defaults_set_bool(ISOFFLINE, YES);
+    //    [self.navigationController setViewControllers:@[instantiateVC(@"MainView")] animated:NO];
+    //    [SHAREMANAGER clearUserDefault];
     
-//    [DELG.updLoctionTimer invalidate];
-//    DELG.updLoctionTimer = nil;
-//    [SHAREMANAGER clearUserDefault];
-//    
-//    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
+    //    [DELG.updLoctionTimer invalidate];
+    //    DELG.updLoctionTimer = nil;
+    //    [SHAREMANAGER clearUserDefault];
+    //
+    //    [self.navigationController setViewControllers:@[instantiateVC(LOGIN)] animated:NO];
 }
 @end
